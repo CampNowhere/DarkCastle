@@ -10,7 +10,7 @@ void usage() {
     printf("Usage: dark <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
-void main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     unsigned char kdf_salt[] = "CastleCipherSui";
     int kdf_iterations = 10000;
 
