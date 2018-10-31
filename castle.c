@@ -48,10 +48,6 @@ void main(int argc, char *argv[]) {
         printf("%s not found\n", infile_name);
         exit(1);
     }
-    if (access(outfile_name, F_OK) == -1 ) {
-        printf("%s not found\n", outfile_name);
-        exit(1);
-    }
     infile = fopen(infile_name, "rb");
     fseek(infile, 0, SEEK_END);
     long fsize = ftell(infile);
