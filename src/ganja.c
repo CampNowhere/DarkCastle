@@ -1,0 +1,235 @@
+#include <string.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+uint32_t conv8to32(unsigned char buf[]) {
+    int i;
+    uint32_t output;
+
+    output = (buf[0] << 24) + (buf[1] << 16) + (buf[2] << 8) + buf[3];
+    return output;
+}
+
+uint32_t rotl(uint32_t v, int c) {
+    return ((v << c) | (v >> (32 - c)));
+}
+
+uint32_t F1(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
+    return (a ^ b ^ c ^ d);
+}
+
+uint32_t F2(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
+    return (a + b + c + d) & 0xFFFFFFFF;
+}
+
+unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt) {
+    int rounds = 4 * 8;
+    uint32_t H[8] = {0};
+    unsigned char temp[4];
+    uint32_t temp32[8];
+    uint32_t t, m;
+    uint32_t W[8];
+    W[0] = 0x72000000;
+    W[1] = 0xacdef012;
+    W[2] = 0x0059c491;
+    W[3] = 0xb8a79b02;
+    W[4] = 0x31ba94b9;
+    W[5] = 0x45000057;
+    W[6] = 0xb5f3810a;
+    W[7] = 0x8a348b7d;
+    int b, i, f, s, r;
+    int c = 0;
+    int blocks = datalen / 32;
+    int blocks_extra = datalen % 32;
+    int blocksize = 32;
+    if (blocks_extra != 0) {
+        blocks += 1;
+    }
+    s = 0;
+    m = 0x00000001;
+    for (i = 0; i < (strlen(salt) / 4); i++) {
+        W[i] = (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
+        W[i] = (W[i] + m) & 0xFFFFFFFF;
+        s += 4;
+    }
+
+    for (b = 0; b < blocks; b++) {
+	for (i = 0; i < (blocksize / 4); i++) {
+	    uint32_t block[8] = {blocks_extra};
+            for (f = 0; f < 4; f++) {
+	        temp[f] = data[c];
+	        c += 1;
+	    }
+            block[i] = conv8to32(temp);
+            H[i] ^= block[i] ^ W[i];
+        }
+        memcpy(temp32, H, 8 * sizeof(uint32_t));
+	for (r = 0; r < rounds; r++) {
+            m = F1(H[1], H[2], H[3], H[4]);
+            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            H[0] = rotl(H[0], 2);
+            m = F2(H[5], H[6], H[7], H[0]);
+            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            for (s = 0; s < 7; s++) {
+                t = H[s];
+                H[s] = H[(s + 1) % 8];
+                H[(s + 1) % 8] = t;
+            }
+	}
+        for (s = 0; s < 8; s++) {
+            H[s] = (temp32[s] + H[s]) & 0xFFFFFFFF;
+        }
+    }
+	    
+    c = 0;
+    for (i = 0; i < 8; i++) {
+        D[c] = (H[i] & 0xFF000000) >> 24;
+        D[c+1] = (H[i] & 0x00FF0000) >> 16;
+	D[c+2] = (H[i] & 0x0000FF00) >> 8;
+	D[c+3] = (H[i] & 0x000000FF);
+	c = (c + 4);
+    }
+}
+
+unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D, unsigned char * key, int keylen, unsigned char *salt) {
+    int rounds = 4 * 8;
+    uint32_t H[8] = {0};
+    unsigned char temp[4];
+    uint32_t temp32[8];
+    uint32_t t, m;
+    uint32_t W[8] = {0};
+    int b, i, f, s, r;
+    int c = 0;
+    int blocks = datalen / 32;
+    int blocks_extra = datalen % 32;
+    int blocksize = 32;
+    if (blocks_extra != 0) {
+        blocks += 1;
+    }
+    s = 0;
+    m = 0x00000001;
+    for (i = 0; i < (keylen / 4); i++) {
+        H[i] = (key[s] << 24) + (key[s+1] << 16) + (key[s+2] << 8) + key[s+3];
+        H[i] = (H[i] + m) & 0xFFFFFFFF;
+        m = (m + H[i]) & 0xFFFFFFFF;
+        s += 4;
+    }
+    s = 0;
+    for (i = 0; i < (strlen(salt) / 4); i++) {
+        W[i] = (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
+        W[i] = (W[i] + m) & 0xFFFFFFFF;
+        m = (m + W[i]) & 0xFFFFFFFF;
+        s += 4;
+    }
+
+    for (b = 0; b < blocks; b++) {
+	for (i = 0; i < (blocksize / 4); i++) {
+	    uint32_t block[8] = {blocks_extra};
+            for (f = 0; f < 4; f++) {
+	        temp[f] = data[c];
+	        c += 1;
+	    }
+            block[i] = conv8to32(temp);
+            H[i] ^= block[i] ^ W[i];
+        }
+        memcpy(temp32, H, 8 * sizeof(uint32_t));
+	for (r = 0; r < rounds; r++) {
+            m = F1(H[1], H[2], H[3], H[4]);
+            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            H[0] = rotl(H[0], 2);
+            m = F2(H[5], H[6], H[7], H[0]);
+            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            for (s = 0; s < 7; s++) {
+                t = H[s];
+                H[s] = H[(s + 1) % 8];
+                H[(s + 1) % 8] = t;
+            }
+	}
+        for (s = 0; s < 8; s++) {
+            H[s] = (temp32[s] + H[s]) & 0xFFFFFFFF;
+        }
+    }
+	    
+    c = 0;
+    for (i = 0; i < 8; i++) {
+        D[c] = (H[i] & 0xFF000000) >> 24;
+        D[c+1] = (H[i] & 0x00FF0000) >> 16;
+	D[c+2] = (H[i] & 0x0000FF00) >> 8;
+	D[c+3] = (H[i] & 0x000000FF);
+	c = (c + 4);
+    }
+}
+
+unsigned char * ganja_kdf(unsigned char * password, int passlen, unsigned char * D, int iterations, int keylen, unsigned char *salt) {
+    int rounds = 4 * 8;
+    int j;
+    uint32_t H[8] = {0};
+    unsigned char temp[4];
+    uint32_t temp32[8];
+    uint32_t t, m;
+    uint32_t W[8];
+    W[0] = 0x72000000;
+    W[1] = 0xacdef012;
+    W[2] = 0x0059c491;
+    W[3] = 0xb8a79b02;
+    W[4] = 0x31ba94b9;
+    W[5] = 0x45000057;
+    W[6] = 0xb5f3810a;
+    W[7] = 0x8a348b7d;
+    int b, i, f, s, r;
+    int c = 0;
+    int blocks = passlen / 32;
+    int blocks_extra = passlen % 32;
+    int blocksize = 32;
+    if (blocks_extra != 0) {
+        blocks += 1;
+    }
+    s = 0;
+    m = 0x00000001;
+    for (i = 0; i < (strlen(salt) / 4); i++) {
+        W[i] = (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
+        W[i] = (W[i] + m) & 0xFFFFFFFF;
+        m = (m + W[i]) & 0xFFFFFFFF;
+        s += 4;
+    }
+
+    for (b = 0; b < blocks; b++) {
+	for (i = 0; i < (blocksize / 4); i++) {
+	    uint32_t block[8] = {blocks_extra};
+            for (f = 0; f < 4; f++) {
+	        temp[f] = password[c];
+	        c += 1;
+	    }
+            block[i] = conv8to32(temp);
+            H[i] ^= block[i] ^ W[i];
+        }
+        for (j = 0; j < iterations; j++) {
+            memcpy(temp32, H, 8 * sizeof(uint32_t));
+	    for (r = 0; r < rounds; r++) {
+                m = F1(H[1], H[2], H[3], H[4]);
+                H[7] = (H[7] + m) & 0xFFFFFFFF;
+                H[0] = rotl(H[0], 2);
+                m = F2(H[5], H[6], H[7], H[0]);
+                H[7] = (H[7] + m) & 0xFFFFFFFF;
+                for (s = 0; s < 7; s++) {
+                    t = H[s];
+                    H[s] = H[(s + 1) % 8];
+                    H[(s + 1) % 8] = t;
+                }
+	    }
+            for (s = 0; s < 8; s++) {
+                H[s] = (temp32[s] + H[s]) & 0xFFFFFFFF;
+            }
+        }
+    }
+	    
+    c = 0;
+    for (i = 0; i < (keylen / 4); i++) {
+        D[c] = (H[i] & 0xFF000000) >> 24;
+        D[c+1] = (H[i] & 0x00FF0000) >> 16;
+	D[c+2] = (H[i] & 0x0000FF00) >> 8;
+	D[c+3] = (H[i] & 0x000000FF);
+	c = (c + 4);
+    }
+}
