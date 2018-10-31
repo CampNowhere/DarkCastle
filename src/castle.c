@@ -6,7 +6,7 @@
 
 void usage() {
     printf("DarkCastle v0.1 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nDark      256 bit\nWrzeszcz  256 bit\nRedDye    128 bit\nBlueDye   256 bit\n\n");
+    printf("Algorithms:\n***********\n\ndark      256 bit\nwrzeszcz  256 bit\nredDye    128 bit\nblueDye   256 bit\n\n");
     printf("Usage: dark <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
