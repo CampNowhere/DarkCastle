@@ -71,7 +71,7 @@ void dark_decrypt(char *infile_name, long fsize, char *outfile_name, int key_len
         free(msg);
     }
     else {
-        printf("Error: Message has been tampered.\n");
+        printf("Error: Message has been tampered with.\n");
     }
 }
 
@@ -140,7 +140,7 @@ void reddye_decrypt(char *infile_name, long fsize, char *outfile_name, int key_l
         free(msg);
     }
     else {
-        printf("Error: Message has been tampered.\n");
+        printf("Error: Message has been tampered with.\n");
     }
 }
 
@@ -209,7 +209,7 @@ void bluedye_decrypt(char *infile_name, long fsize, char *outfile_name, int key_
         free(msg);
     }
     else {
-        printf("Error: Message has been tampered.\n");
+        printf("Error: Message has been tampered with.\n");
     }
 }
 
@@ -278,6 +278,6 @@ void wrzeszcz_decrypt(char *infile_name, long fsize, char *outfile_name, int key
         free(msg);
     }
     else {
-        printf("Error: Message has been tampered.\n");
+        printf("Error: Message has been tampered with.\n");
     }
 }
