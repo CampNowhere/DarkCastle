@@ -4,6 +4,8 @@
 
 DarkCastle is an authenticated file encryption program aiming to provide a large collection of community ciphers.  This program is intended for educational use until full cryptanalysis can be completed.
 
+Please note these are one-shot encryption functions and will encrypt what you can fit into memory.
+
 # Algorithms and authenticators
 
 Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
