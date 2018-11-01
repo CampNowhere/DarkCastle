@@ -6,10 +6,10 @@ DarkCastle is an authenticated file encryption program aiming to provide a large
 
 # Algorithms and authenticators
 
-Dark 256 bit authenticated with Ganja 256 bit
+Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
-Wrzeszcz 256 bit authenticated with Ganja 256 bit
+Wrzeszcz 256 bit authenticated with Ganja 256 bit - 64 bit nonce length
 
-BlueDye 256 bit authenticated with Ganja 256 bit
+BlueDye 256 bit authenticated with Ganja 256 bit - 64 bit nonce length
 
-RedDye 128 bit authenticated with H4A 128 bit
+RedDye 128 bit authenticated with H4A 128 bit - 64 bit nonce length
