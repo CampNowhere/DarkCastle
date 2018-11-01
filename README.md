@@ -12,8 +12,16 @@ DarkCastle is accepting ciphers.  Email pvial@kryptomagik.com or open a github i
 
 Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
+https://github.com/pvial00/DarkCipher
+
 Wrzeszcz 256 bit authenticated with Ganja 256 bit - 64 bit nonce length
+
+https://github.com/pvial00/Wrzeszcz
 
 BlueDye 256 bit authenticated with Ganja 256 bit - 64 bit nonce length
 
+https://github.com/pvial00/BlueDye
+
 RedDye 128 bit authenticated with H4A 128 bit - 64 bit nonce length
+
+https://github.com/pvial00/RedDye
