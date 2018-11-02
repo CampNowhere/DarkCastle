@@ -24,7 +24,7 @@ uint32_t F2(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
 }
 
 unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt) {
-    int rounds = 4 * 8;
+    int rounds = 10 * 8;
     uint32_t H[8] = {0};
     unsigned char temp[4];
     uint32_t temp32[8];
@@ -93,7 +93,7 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
 }
 
 unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D, unsigned char * key, int keylen, unsigned char *salt) {
-    int rounds = 4 * 8;
+    int rounds = 10 * 8;
     uint32_t H[8] = {0};
     unsigned char temp[4];
     uint32_t temp32[8];
@@ -162,7 +162,7 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
 }
 
 unsigned char * ganja_kdf(unsigned char * password, int passlen, unsigned char * D, int iterations, int keylen, unsigned char *salt) {
-    int rounds = 4 * 8;
+    int rounds = 10 * 8;
     int j;
     uint32_t H[8] = {0};
     unsigned char temp[4];
