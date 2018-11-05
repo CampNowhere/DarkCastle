@@ -6,8 +6,6 @@ DarkCastle is an authenticated file encryption program aiming to provide a large
 
 Please note these are one-shot encryption functions and will encrypt what you can fit into memory.
 
-Recommended cipher is Dark64.
-
 DarkCastle is accepting ciphers.  Email pvial@kryptomagik.com or open a github issue to submit/integrate a cipher, hash function, KDF or authentication method.
 
 # Algorithms and authenticators
