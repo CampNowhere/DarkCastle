@@ -16,7 +16,7 @@ void dark_F(uint32_t dark_j, uint32_t dark_ct) {
     uint32_t x;
     for (i = 0; i < 8; i++) {
         x = dark_r[i];
-	dark_r[i] = (dark_r[i] + dark_r[(i + 1) % 8] + dark_j) & 0xFFFFFFFF;
+	dark_r[i] = (dark_r[i] + dark_r[(i + 1) & 0x07] + dark_j) & 0xFFFFFFFF;
 	dark_r[i] = dark_r[i] ^ x;
 	dark_r[i] = dark_rotate(dark_r[i], 2) & 0xFFFFFFFF;
 	dark_j = (dark_j + dark_r[i] + dark_ct) & 0xFFFFFFFF;
