@@ -121,7 +121,7 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
 }
 
 unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D, unsigned char * key, int keylen, unsigned char *salt) {
-    int rounds = 4 * 8;
+    int rounds = 10 * 8;
     uint32_t H[8] = {0};
     unsigned char temp[4];
     uint32_t temp32[8];
