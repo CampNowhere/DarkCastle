@@ -10,13 +10,14 @@ DarkCastle is accepting ciphers.  Email pvial@kryptomagik.com or open a github i
 
 # Algorithms and authenticators
 
-Dark64 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
-
-https://github.com/pvial00/Dark64
+Recommended cipher is Dark
 
 Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/DarkCipher
+
+Dark64 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
+
 
 Wrzeszcz 256 bit authenticated with Ganja 256 bit - 64 bit nonce length
 
