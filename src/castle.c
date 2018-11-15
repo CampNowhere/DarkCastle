@@ -72,14 +72,6 @@ int main(int argc, char *argv[]) {
             dark_decrypt(infile_name, fsize, outfile_name, dark_key_length, dark_nonce_length, dark_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
-    else if (strcmp(algorithm, "reddye") == 0) {
-        if (strcmp(mode, encrypt_symbol) == 0) {
-            reddye_encrypt(infile_name, fsize, outfile_name, reddye_key_length, reddye_nonce_length, reddye_mac_length, kdf_iterations, kdf_salt, password);
-        }
-        else if (strcmp(mode, decrypt_symbol) == 0) {
-            reddye_decrypt(infile_name, fsize, outfile_name, reddye_key_length, reddye_nonce_length, reddye_mac_length, kdf_iterations, kdf_salt, password);
-        }
-    }
     else if (strcmp(algorithm, "bluedye") == 0) {
         if (strcmp(mode, encrypt_symbol) == 0) {
             bluedye_encrypt(infile_name, fsize, outfile_name, bluedye_key_length, bluedye_nonce_length, bluedye_mac_length, kdf_iterations, kdf_salt, password);
