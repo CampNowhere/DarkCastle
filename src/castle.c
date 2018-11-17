@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
             wrzeszcz_decrypt(infile_name, fsize, outfile_name, wrzeszcz_key_length, wrzeszcz_nonce_length, wrzeszcz_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
-    else if (strcmp(algorithm, "zanderfish") == 0) {
+    else if (strcmp(algorithm, "zanderfish-cbc") == 0) {
         if (strcmp(mode, encrypt_symbol) == 0) {
             zandercbc_encrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
         }
