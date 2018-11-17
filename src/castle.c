@@ -6,7 +6,7 @@
 
 void usage() {
     printf("DarkCastle v0.1.1 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\n\n");
+    printf("Algorithms:\n***********\n\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -86,14 +86,6 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             wrzeszcz_decrypt(infile_name, fsize, outfile_name, wrzeszcz_key_length, wrzeszcz_nonce_length, wrzeszcz_mac_length, kdf_iterations, kdf_salt, password);
-        }
-    }
-    else if (strcmp(algorithm, "zanderfish-cbc") == 0) {
-        if (strcmp(mode, encrypt_symbol) == 0) {
-            zandercbc_encrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
-        }
-        else if (strcmp(mode, decrypt_symbol) == 0) {
-            zandercbc_decrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
 }
