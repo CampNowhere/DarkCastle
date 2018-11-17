@@ -13,7 +13,7 @@ uint32_t rotate(uint32_t a, uint32_t b) {
     return ((a << b) | (a >> (32 - b)));
 }
 
-void *F(struct dark_state *state) {
+void *dark_F(struct dark_state *state) {
     int i;
     uint32_t x;
     for (i = 0; i < 8; i++) {
@@ -26,7 +26,7 @@ void *F(struct dark_state *state) {
     }
 }
 
-void keysetup(struct dark_state *state, unsigned char *key, unsigned char *nonce) {
+void dark_keysetup(struct dark_state *state, unsigned char *key, unsigned char *nonce) {
     uint32_t n[4];
     state->r[0] = (key[0] << 24) + (key[1] << 16) + (key[2] << 8) + key[3];
     state->r[1] = (key[4] << 24) + (key[5] << 16) + (key[6] << 8) + key[7];
@@ -53,7 +53,7 @@ void keysetup(struct dark_state *state, unsigned char *key, unsigned char *nonce
     for (int i = 0; i < 8; i++) {
         state->j = (state->j + state->r[i]) & 0xFFFFFFFF;
     }
-    F(state);
+    dark_F(state);
 }
 
 void * dark_crypt(unsigned char * data, unsigned char * key, unsigned char * nonce, long datalen) {
@@ -68,9 +68,9 @@ void * dark_crypt(unsigned char * data, unsigned char * key, unsigned char * non
     if (extra != 0) {
         blocks += 1;
     }
-    keysetup(&state, key, nonce);
+    dark_keysetup(&state, key, nonce);
     for (long b = 0; b < blocks; b++) {
-        F(&state);
+        dark_F(&state);
         output = (((((((state.r[0] + state.r[6]) ^ state.r[1]) + state.r[5]) ^ state.r[2]) + state.r[4]) ^ state.r[3]) + state.r[7]) & 0xFFFFFFFF;
         k[0] = (output & 0x000000FF);
         k[1] = (output & 0x0000FF00) >> 8;

@@ -8,24 +8,24 @@ uint64_t r[8] = {0};
 uint64_t j = 0;
 uint64_t ct = 0;
 
-uint64_t rotate(uint64_t a, uint64_t b) {
+uint64_t rotateleft64(uint64_t a, uint64_t b) {
     return ((a << b) | (a >> (64 - b)));
 }
 
-void F(uint64_t j, uint64_t ct) {
+void dark64_F(uint64_t j, uint64_t ct) {
     int i;
     uint64_t x;
     for (i = 0; i < 8; i++) {
         x = r[i];
 	r[i] = (r[i] + r[(i + 1) & 0x07] + j);
 	r[i] = r[i] ^ x;
-	r[i] = rotate(r[i], 2);
+	r[i] = rotateleft64(r[i], 2);
 	j = (j + r[i] + ct);
 	ct = (ct + 1);
     }
 }
 
-void keysetup(unsigned char *key, unsigned char *nonce) {
+void dark64_keysetup(unsigned char *key, unsigned char *nonce) {
     uint64_t n[4];
     int i;
     int m = 0;
@@ -46,7 +46,7 @@ void keysetup(unsigned char *key, unsigned char *nonce) {
         j = (j + r[i]);
     }
     for (int i = 0; i < 64; i++) {
-        F(j, ct);
+        dark64_F(j, ct);
     }
 }
 
@@ -61,9 +61,9 @@ void * dark64_crypt(unsigned char * data, unsigned char * key, unsigned char * n
     if (extra != 0) {
         blocks += 1;
     }
-    keysetup(key, nonce);
+    dark64_keysetup(key, nonce);
     for (long b = 0; b < blocks; b++) {
-        F(j, ct);
+        dark64_F(j, ct);
 	output = ((((r[1] + r[7]) ^ r[3]) ^ r[5]));
         k[0] = (output & 0x00000000000000FF);
         k[1] = (output & 0x000000000000FF00) >> 8;
