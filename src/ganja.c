@@ -26,7 +26,6 @@ uint32_t F2(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
 unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt) {
     int rounds = 10 * 8;
     uint32_t H[8] = {0};
-    unsigned char temp[4];
     uint32_t temp32[8];
     uint32_t t, m;
     uint32_t W[8];
@@ -40,7 +39,8 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
     W[7] = 0x8a348b7d;
     int b, i, f, s, r;
     int c = 0;
-    int blocks = datalen / 32;
+    int blocks = 0; 
+    blocks = datalen / 32;
     int blocks_extra = datalen % 32;
     int blocksize = 32;
     if (blocks_extra != 0) {
@@ -49,21 +49,49 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
     s = 0;
     m = 0x00000001;
     for (i = 0; i < (strlen(salt) / 4); i++) {
-        W[i] = (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
+        W[i] ^= (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
         W[i] = (W[i] + m) & 0xFFFFFFFF;
         s += 4;
     }
-
+    int extra = blocks_extra % 4;
+    int extc = (blocks_extra /4) % 8;
+    int l = 4;
+    int bc = 0;
     for (b = 0; b < blocks; b++) {
 	for (i = 0; i < (blocksize / 4); i++) {
 	    uint32_t block[8] = {blocks_extra};
-            for (f = 0; f < 4; f++) {
-	        temp[f] = data[c];
-	        c += 1;
+            unsigned char temp[4] = {0};
+	    if (b == (blocks - 1) && (blocks_extra != 0)) {
+                if (bc > extc) {
+		    for (f = 0; f < 4; f++) {
+		        temp[f] =  0;
+		        c += 1;
+		    }
+                    block[i] = conv8to32(temp);
+                    H[i] ^= block[i] ^ W[i];
+		}
+		else if (bc <= extc) {
+	            if (bc == extc) {
+		        l = extra;
+		    }
+                    for (f = 0; f < l; f++) {
+	                temp[f] = data[c];
+	                c += 1;
+	            }
+                    block[i] = conv8to32(temp);
+                    H[i] ^= block[i] ^ W[i];
+		}
+		s += 1;
+            }
+	    else {
+                for (f = 0; f < 4; f++) {
+	            temp[f] = data[c];
+	            c += 1;
+	        }
+                block[i] = conv8to32(temp);
+                H[i] ^= block[i] ^ W[i];
 	    }
-            block[i] = conv8to32(temp);
-            H[i] ^= block[i] ^ W[i];
-        }
+	}
         memcpy(temp32, H, 8 * sizeof(uint32_t));
 	for (r = 0; r < rounds; r++) {
             m = F1(H[1], H[2], H[3], H[4]);
@@ -86,8 +114,8 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
     for (i = 0; i < 8; i++) {
         D[c] = (H[i] & 0xFF000000) >> 24;
         D[c+1] = (H[i] & 0x00FF0000) >> 16;
-	D[c+2] = (H[i] & 0x0000FF00) >> 8;
-	D[c+3] = (H[i] & 0x000000FF);
+        D[c+2] = (H[i] & 0x0000FF00) >> 8;
+        D[c+3] = (H[i] & 0x000000FF);
 	c = (c + 4);
     }
 }
@@ -122,16 +150,44 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
         m = (m + W[i]) & 0xFFFFFFFF;
         s += 4;
     }
-
+    int extra = blocks_extra % 4;
+    int extc = (blocks_extra /4) % 8;
+    int l = 4;
+    int bc = 0;
     for (b = 0; b < blocks; b++) {
-	for (i = 0; i < (blocksize / 4); i++) {
-	    uint32_t block[8] = {blocks_extra};
-            for (f = 0; f < 4; f++) {
-	        temp[f] = data[c];
-	        c += 1;
-	    }
-            block[i] = conv8to32(temp);
-            H[i] ^= block[i] ^ W[i];
+        for (i = 0; i < (blocksize / 4); i++) {
+            uint32_t block[8] = {blocks_extra};
+            unsigned char temp[4] = {0};
+            if (b == (blocks - 1) && (blocks_extra != 0)) {
+                if (bc > extc) {
+                    for (f = 0; f < 4; f++) {
+                        temp[f] =  0;
+                        c += 1;
+                    }
+                    block[i] = conv8to32(temp);
+                    H[i] ^= block[i] ^ W[i];
+                }
+                else if (bc <= extc) {
+                    if (bc == extc) {
+                        l = extra;
+                    }
+                    for (f = 0; f < l; f++) {
+                        temp[f] = data[c];
+                        c += 1;
+                    }
+                    block[i] = conv8to32(temp);
+                    H[i] ^= block[i] ^ W[i];
+                }
+                s += 1;
+            }
+            else {
+                for (f = 0; f < 4; f++) {
+                    temp[f] = data[c];
+                    c += 1;
+                }
+                block[i] = conv8to32(temp);
+                H[i] ^= block[i] ^ W[i];
+            }
         }
         memcpy(temp32, H, 8 * sizeof(uint32_t));
 	for (r = 0; r < rounds; r++) {
@@ -155,81 +211,18 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
     for (i = 0; i < 8; i++) {
         D[c] = (H[i] & 0xFF000000) >> 24;
         D[c+1] = (H[i] & 0x00FF0000) >> 16;
-	D[c+2] = (H[i] & 0x0000FF00) >> 8;
-	D[c+3] = (H[i] & 0x000000FF);
+        D[c+2] = (H[i] & 0x0000FF00) >> 8;
+        D[c+3] = (H[i] & 0x000000FF);
 	c = (c + 4);
     }
 }
 
 unsigned char * ganja_kdf(unsigned char * password, int passlen, unsigned char * D, int iterations, int keylen, unsigned char *salt) {
-    int rounds = 10 * 8;
-    int j;
-    uint32_t H[8] = {0};
-    unsigned char temp[4];
-    uint32_t temp32[8];
-    uint32_t t, m;
-    uint32_t W[8];
-    W[0] = 0x72000000;
-    W[1] = 0xacdef012;
-    W[2] = 0x0059c491;
-    W[3] = 0xb8a79b02;
-    W[4] = 0x31ba94b9;
-    W[5] = 0x45000057;
-    W[6] = 0xb5f3810a;
-    W[7] = 0x8a348b7d;
     int b, i, f, s, r;
     int c = 0;
-    int blocks = passlen / 32;
-    int blocks_extra = passlen % 32;
-    int blocksize = 32;
-    if (blocks_extra != 0) {
-        blocks += 1;
-    }
-    s = 0;
-    m = 0x00000001;
-    for (i = 0; i < (strlen(salt) / 4); i++) {
-        W[i] = (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
-        W[i] = (W[i] + m) & 0xFFFFFFFF;
-        m = (m + W[i]) & 0xFFFFFFFF;
-        s += 4;
-    }
-
-    for (b = 0; b < blocks; b++) {
-	for (i = 0; i < (blocksize / 4); i++) {
-	    uint32_t block[8] = {blocks_extra};
-            for (f = 0; f < 4; f++) {
-	        temp[f] = password[c];
-	        c += 1;
-	    }
-            block[i] = conv8to32(temp);
-            H[i] ^= block[i] ^ W[i];
-        }
-        for (j = 0; j < iterations; j++) {
-            memcpy(temp32, H, 8 * sizeof(uint32_t));
-	    for (r = 0; r < rounds; r++) {
-                m = F1(H[1], H[2], H[3], H[4]);
-                H[7] = (H[7] + m) & 0xFFFFFFFF;
-                H[0] = rotl(H[0], 2);
-                m = F2(H[5], H[6], H[7], H[0]);
-                H[7] = (H[7] + m) & 0xFFFFFFFF;
-                for (s = 0; s < 7; s++) {
-                    t = H[s];
-                    H[s] = H[(s + 1) % 8];
-                    H[(s + 1) % 8] = t;
-                }
-	    }
-            for (s = 0; s < 8; s++) {
-                H[s] = (temp32[s] + H[s]) & 0xFFFFFFFF;
-            }
-        }
+    ganja_digest(password, strlen(password), D, salt);
+    for (i = 0; i < iterations; i++) {
+        ganja_digest(D, keylen, D, salt);
     }
 	    
-    c = 0;
-    for (i = 0; i < (keylen / 4); i++) {
-        D[c] = (H[i] & 0xFF000000) >> 24;
-        D[c+1] = (H[i] & 0x00FF0000) >> 16;
-	D[c+2] = (H[i] & 0x0000FF00) >> 8;
-	D[c+3] = (H[i] & 0x000000FF);
-	c = (c + 4);
-    }
 }
