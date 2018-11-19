@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.1.2 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\n\n");
+    printf("DarkCastle v0.1.3 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -22,18 +22,21 @@ int main(int argc, char *argv[]) {
     int dark_nonce_length = 16;
     int dark64_nonce_length = 16;
     int wrzeszcz_nonce_length = 8;
+    int wild_nonce_length = 8;
 
-    int zanderfish_key_length = 16;
+    int zanderfish_key_length = 32;
     int bluedye_key_length = 32;
     int dark_key_length = 32;
     int dark64_key_length = 32;
     int wrzeszcz_key_length = 32;
+    int wild_key_length = 16;
 
     int dark_mac_length = 32;
     int dark64_mac_length = 32;
     int bluedye_mac_length = 32;
-    int zanderfish_mac_length = 16;
+    int zanderfish_mac_length = 32;
     int wrzeszcz_mac_length = 32;
+    int wild_mac_length = 32;
 
     if (argc != 6) {
         usage();
@@ -94,6 +97,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             zandercbc_decrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "wild") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            wild_encrypt(infile_name, fsize, outfile_name, wild_key_length, wild_nonce_length, wild_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            wild_decrypt(infile_name, fsize, outfile_name, wild_key_length, wild_nonce_length, wild_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
 }
