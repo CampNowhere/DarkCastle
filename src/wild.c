@@ -76,9 +76,9 @@ unsigned char * wild_crypt(unsigned char * msg, unsigned char * key, unsigned ch
         k[3] = (lfsr_out & 0xFF000000) >> 24;
         if (i == (blocks) && (msglen_extra != 0)) {
             v = msglen_extra; }
-	for (int x = 0; x < v; x++) {
-	    msg[c] = msg[c] ^ k[x];
-	    c += 1;
+        for (int x = 0; x < v; x++) {
+            msg[c] = msg[c] ^ k[x];
+            c += 1;
        	}
     }
 }
