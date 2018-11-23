@@ -23,7 +23,7 @@ void zanderfish_ofb_encrypt(unsigned char * msg, int msglen, unsigned char * key
 
         block_encrypt(&xl, &xr);
 
-	output[0] = (xl & 0xFF000000) >> 24;
+        output[0] = (xl & 0xFF000000) >> 24;
         output[1] = (xl & 0x00FF0000) >> 16;
         output[2] = (xl & 0x0000FF00) >> 8;
         output[3] = (xl & 0x000000FF);
