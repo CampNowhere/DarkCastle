@@ -215,6 +215,9 @@ void zanderofb_decrypt(char *infile_name, long fsize, char *outfile_name, int ke
         fclose(outfile);
         free(msg);
     }
+    else {
+        printf("Error: Message has been tampered with.\n");
+    }
 }
 
 void dark64_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
