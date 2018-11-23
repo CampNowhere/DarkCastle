@@ -23,7 +23,7 @@ uint32_t F2(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
     return (a + b + c + d) & 0xFFFFFFFF;
 }
 
-unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt) {
+unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt, int saltlen) {
     int rounds = 10 * 8;
     uint32_t H[8] = {0};
     uint32_t temp32[8];
@@ -48,7 +48,7 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
     }
     s = 0;
     m = 0x00000001;
-    for (i = 0; i < (strlen(salt) / 4); i++) {
+    for (i = 0; i < (saltlen / 4); i++) {
         W[i] ^= (salt[s] << 24) + (salt[s+1] << 16) + (salt[s+2] << 8) + salt[s+3];
         W[i] = (W[i] + m) & 0xFFFFFFFF;
         s += 4;
@@ -101,8 +101,8 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
             H[7] = (H[7] + m) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
                 t = H[s];
-                H[s] = H[(s + 1) % 8];
-                H[(s + 1) % 8] = t;
+                H[s] = H[(s + 1) & 0x07];
+                H[(s + 1) & 0x07] = t;
             }
 	}
         for (s = 0; s < 8; s++) {
@@ -198,8 +198,8 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
             H[7] = (H[7] + m) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
                 t = H[s];
-                H[s] = H[(s + 1) % 8];
-                H[(s + 1) % 8] = t;
+                H[s] = H[(s + 1) & 0x07];
+                H[(s + 1) & 0x07] = t;
             }
 	}
         for (s = 0; s < 8; s++) {
@@ -220,9 +220,32 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
 unsigned char * ganja_kdf(unsigned char * password, int passlen, unsigned char * D, int iterations, int keylen, unsigned char *salt) {
     int b, i, f, s, r;
     int c = 0;
-    ganja_digest(password, strlen(password), D, salt);
+    ganja_digest(password, strlen(password), D, salt, 12);
     for (i = 0; i < iterations; i++) {
-        ganja_digest(D, keylen, D, salt);
+        ganja_digest(D, keylen, D, salt, 12);
     }
 	    
+}
+
+unsigned char * ganja_crypt(unsigned char * msg, unsigned char * key, unsigned char * nonce, long msglen) {
+    long blocks = msglen / 32;
+    int extra = msglen % 32;
+    int blocklen = 32;
+    if (extra != 0) {
+        blocks += 1;
+    }
+    int i = 0;
+    int c = 0;
+    unsigned char state[32];
+    ganja_digest(key, 32, &state, nonce, 16);
+    for (int b = 0; b < blocks; b++) {
+        ganja_digest(&state, 32, &state, key, 32);
+        if (b == (blocks -1)) {
+            blocklen = extra;
+        }
+        for (i = 0; i < blocklen; i++) {
+            msg[c] = msg[c] ^ state[i];
+            c += 1;
+        }
+    }
 }
