@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.1.3 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\n\n");
+    printf("DarkCastle v0.1.4 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     char *encrypt_symbol = "-e";
     char *decrypt_symbol = "-d";
 
-    int zanderfish_nonce_length = 16;
+    int zanderfish_nonce_length = 8;
     int bluedye_nonce_length = 8;
     int dark_nonce_length = 16;
     int dark64_nonce_length = 16;
@@ -100,6 +100,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             zandercbc_decrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "zanderfish-ofb") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            zanderofb_encrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            zanderofb_decrypt(infile_name, fsize, outfile_name, zanderfish_key_length, zanderfish_nonce_length, zanderfish_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     else if (strcmp(algorithm, "wild") == 0) {
