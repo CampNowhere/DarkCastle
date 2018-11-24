@@ -6,6 +6,7 @@
 struct dark_state {
     uint32_t r[8];
     uint32_t j;
+    uint32_t c;
 };
 
 uint32_t rotate(uint32_t a, uint32_t b) {
@@ -20,7 +21,8 @@ void *dark_F(struct dark_state *state) {
         state->r[i] = (state->r[i] + state->r[(i + 1) % 8] + state->j) & 0xFFFFFFFF;
         state->r[i] = state->r[i] ^ x;
         state->r[i] = rotate(state->r[i], 2) & 0xFFFFFFFF;
-        state->j = (state->j + state->r[i]) & 0xFFFFFFFF;
+        state->j = (state->j + state->r[i] + state->c) & 0xFFFFFFFF;
+        state->c = (state->c + 1) & 0xFFFFFFFF;
     }
 }
 
@@ -46,6 +48,7 @@ void dark_keysetup(struct dark_state *state, unsigned char *key, unsigned char *
     state->r[7] = state->r[7] ^ n[3];
 
     state->j = 0;
+    state->c = 0;
 
     for (int i = 0; i < 8; i++) {
         state->j = (state->j + state->r[i]) & 0xFFFFFFFF;
