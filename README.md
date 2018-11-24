@@ -2,7 +2,7 @@
 
 *** Warning the ciphers contained in this program are still undergoing cryptanalysis
 
-*** Warning: this product is for non-production use.  If you want production level crytpo, use OpenSSL or libsodium
+*** Warning: this product is for non-production use.  If you want production level crypto, use OpenSSL or libsodium
 
 DarkCastle is an authenticated file encryption program aiming to provide a large collection of community ciphers.  This program is intended for educational use until full cryptanalysis can be completed.
 
