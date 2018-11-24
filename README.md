@@ -18,7 +18,7 @@ Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/DarkCipher
 
-Zanderfish 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
+Zanderfish 256 bit authenticated with Ganja 256 bit - 64 bit IV length
 
 https://github.com/pvial00/Zanderfish
 
