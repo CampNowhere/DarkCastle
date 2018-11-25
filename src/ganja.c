@@ -94,11 +94,11 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
 	}
         memcpy(temp32, H, 8 * sizeof(uint32_t));
 	for (r = 0; r < rounds; r++) {
-            m = F1(H[1], H[2], H[3], H[4]);
-            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            H[1] = F1(H[1], H[2], H[3], H[4]);
+            H[7] = (H[7] + H[1]) & 0xFFFFFFFF;
             H[0] = rotl((H[0] ^ H[7]), 2);
-            m = F2(H[5], H[6], H[7], H[0]);
-            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            H[5] = F2(H[5], H[6], H[7], H[0]);
+            H[7] = (H[7] + H[5]) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
                 t = H[s];
                 H[s] = H[(s + 1) & 0x07];
@@ -191,11 +191,11 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
         }
         memcpy(temp32, H, 8 * sizeof(uint32_t));
 	for (r = 0; r < rounds; r++) {
-            m = F1(H[1], H[2], H[3], H[4]);
-            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            H[1] = F1(H[1], H[2], H[3], H[4]);
+            H[7] = (H[7] + H[1]) & 0xFFFFFFFF;
             H[0] = rotl((H[0] ^ H[7]), 2);
-            m = F2(H[5], H[6], H[7], H[0]);
-            H[7] = (H[7] + m) & 0xFFFFFFFF;
+            H[5] = F2(H[5], H[6], H[7], H[0]);
+            H[7] = (H[7] + H[5]) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
                 t = H[s];
                 H[s] = H[(s + 1) & 0x07];
