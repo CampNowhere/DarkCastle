@@ -96,7 +96,7 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
 	for (r = 0; r < rounds; r++) {
             m = F1(H[1], H[2], H[3], H[4]);
             H[7] = (H[7] + m) & 0xFFFFFFFF;
-            H[0] = rotl(H[0], 2);
+            H[0] = rotl((H[0] ^ H[7]), 2);
             m = F2(H[5], H[6], H[7], H[0]);
             H[7] = (H[7] + m) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
@@ -193,7 +193,7 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
 	for (r = 0; r < rounds; r++) {
             m = F1(H[1], H[2], H[3], H[4]);
             H[7] = (H[7] + m) & 0xFFFFFFFF;
-            H[0] = rotl(H[0], 2);
+            H[0] = rotl((H[0] ^ H[7]), 2);
             m = F2(H[5], H[6], H[7], H[0]);
             H[7] = (H[7] + m) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
