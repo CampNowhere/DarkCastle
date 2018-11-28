@@ -15,6 +15,14 @@ uint32_t rotl(uint32_t v, int c) {
     return ((v << c) | (v >> (32 - c)));
 }
 
+uint32_t F1(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
+    return (a ^ b ^ c ^ d);
+}
+
+uint32_t F2(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
+    return (a + b + c + d) & 0xFFFFFFFF;
+}
+
 unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt, int saltlen) {
     int rounds = 8 * 8;
     uint32_t H[8] = {0};
@@ -94,6 +102,14 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
             H[5] = rotl(H[5] ^ H[3], 7);
             H[6] = (H[6] + H[5]) & 0xFFFFFFFF;
             H[7] = rotl(H[7] ^ H[6], 12);
+            H[0] = F1(H[0], H[2], H[4], H[6]);
+            H[1] = F2(H[1], H[3], H[5], H[7]);
+            H[2] = rotl(H[2] ^ H[0], 3);
+            H[3] = rotl(H[3] ^ H[1], 8);
+            H[4] = H[4] ^ H[2];
+            H[5] = H[5] ^ H[3];
+            H[6] = (H[6] + H[4]) & 0xFFFFFFFF;
+            H[7]= (H[7] + H[5]) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
                 t = H[s];
                 H[s] = H[(s + 1) & 0x07];
@@ -194,6 +210,14 @@ unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D
             H[5] = rotl(H[5] ^ H[3], 7);
             H[6] = (H[6] + H[5]) & 0xFFFFFFFF;
             H[7] = rotl(H[7] ^ H[6], 12);
+            H[0] = F1(H[0], H[2], H[4], H[6]);
+            H[1] = F2(H[1], H[3], H[5], H[7]);
+            H[2] = rotl(H[2] ^ H[0], 3);
+            H[3] = rotl(H[3] ^ H[1], 8);
+            H[4] = H[4] ^ H[2];
+            H[5] = H[5] ^ H[3];
+            H[6] = (H[6] + H[4]) & 0xFFFFFFFF;
+            H[7]= (H[7] + H[5]) & 0xFFFFFFFF;
             for (s = 0; s < 7; s++) {
                 t = H[s];
                 H[s] = H[(s + 1) & 0x07];
