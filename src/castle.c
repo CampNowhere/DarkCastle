@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.1.4 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\n\n");
+    printf("DarkCastle v0.1.5 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\npurple         256 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     int wrzeszcz_nonce_length = 8;
     int wild_nonce_length = 8;
     int ganja_nonce_length = 16;
+    int purple_nonce_length = 16;
 
     int zanderfish_key_length = 32;
     int bluedye_key_length = 32;
@@ -32,6 +33,7 @@ int main(int argc, char *argv[]) {
     int wrzeszcz_key_length = 32;
     int wild_key_length = 16;
     int ganja_key_length = 32;
+    int purple_key_length = 32;
 
     int dark_mac_length = 32;
     int dark64_mac_length = 32;
@@ -40,6 +42,7 @@ int main(int argc, char *argv[]) {
     int wrzeszcz_mac_length = 32;
     int wild_mac_length = 32;
     int ganja_mac_length = 32;
+    int purple_mac_length = 32;
 
     if (argc != 6) {
         usage();
@@ -124,6 +127,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             ganja_decrypt(infile_name, fsize, outfile_name, ganja_key_length, ganja_nonce_length, ganja_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "purple") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            purple_encrypt(infile_name, fsize, outfile_name, purple_key_length, purple_nonce_length, purple_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            purple_decrypt(infile_name, fsize, outfile_name, purple_key_length, purple_nonce_length, purple_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
 }
