@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "dyefamily.c"
-#include "darkcipher.c"
-#include "dark64.c"
-#include "ganja.c"
-#include "zanderfish_cbc.c"
-#include "zanderfish_ofb.c"
-#include "wild.c"
-#include "purple.c"
+#include "ciphers/dyefamily.c"
+#include "ciphers/darkcipher.c"
+#include "ciphers/dark64.c"
+#include "ciphers/ganja.c"
+#include "ciphers/zanderfish_cbc.c"
+#include "ciphers/zanderfish_ofb.c"
+#include "ciphers/wild.c"
+#include "ciphers/purple.c"
+#include "ciphers/uvajda.c"
 
 void dark_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
@@ -612,6 +613,7 @@ void purple_decrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     infile = fopen(infile_name, "rb");
     msg = (unsigned char *) malloc(fsize-mac_length);
     ganja_kdf(password, strlen(password), key, kdf_iterations, key_length, kdf_salt);
+    int x;
     ganja_kdf(key, key_length, mac_key, kdf_iterations, key_length, kdf_salt);
     fread(mac, 1, mac_length, infile);
     fread(msg, 1, (fsize-mac_length), infile);
