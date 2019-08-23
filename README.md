@@ -37,3 +37,7 @@ https://github.com/pvial00/Wrzeszcz
 BlueDye 256 bit authenticated with Ganja 256 bit - 64 bit nonce length
 
 https://github.com/pvial00/BlueDye
+
+Purple 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
+
+https://github.com/pvial00/Purple
