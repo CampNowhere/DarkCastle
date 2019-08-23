@@ -9,7 +9,6 @@
 #include "ciphers/zanderfish_ofb.c"
 #include "ciphers/wild.c"
 #include "ciphers/purple.c"
-#include "ciphers/uvajda.c"
 
 void dark_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
