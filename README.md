@@ -12,7 +12,7 @@ DarkCastle is accepting ciphers.  Email pvial00@gmail.com or open a github issue
 
 # Algorithms and authenticators
 
-Recommended cipher is Dark
+Recommended cipher is Uvajda
 
 Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
