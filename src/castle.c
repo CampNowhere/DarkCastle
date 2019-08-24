@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.1.6 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\npurple         256 bit\n\n");
+    printf("DarkCastle v0.1.7 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\ndark64         256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\npurple         256 bit\nuvajda         256 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -138,6 +138,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             purple_decrypt(infile_name, fsize, outfile_name, purple_key_length, purple_nonce_length, purple_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "uvajda") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            uvajda_encrypt(infile_name, fsize, outfile_name, uvajda_key_length, uvajda_nonce_length, uvajda_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            uvajda_decrypt(infile_name, fsize, outfile_name, uvajda_key_length, uvajda_nonce_length, uvajda_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
 }
