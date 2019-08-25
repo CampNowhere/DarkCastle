@@ -79,11 +79,11 @@ void wildthing_ksa(struct wildthing_state *state, unsigned char * key, unsigned 
 
 unsigned char * wildthing_crypt(unsigned char * msg, unsigned char * key, unsigned char * iv, int msglen) {
     struct wildthing_state state;
-    uint8_t k[4];
+    uint8_t k[8];
     uint64_t lfsr_out;
-    int v = 4;
-    int blocks = msglen / 4;
-    int msglen_extra = msglen % 4;
+    int v = 8;
+    int blocks = msglen / 8;
+    int msglen_extra = msglen % 8;
     int extra = 0;
     int c = 0;
     if (msglen_extra != 0) {
@@ -97,10 +97,14 @@ unsigned char * wildthing_crypt(unsigned char * msg, unsigned char * key, unsign
         state.lfsr[4] = state.lfsr[4] + wt_sumup(&state);
         rotateall(&state);
         lfsr_out = wt_getregister_output(&state);
-        k[0] = (lfsr_out & 0x000000FF);
-        k[1] = (lfsr_out & 0x0000FF00) >> 8;
-        k[2] = (lfsr_out & 0x00FF0000) >> 16;
-        k[3] = (lfsr_out & 0xFF000000) >> 24;
+        k[0] = (lfsr_out & 0x00000000000000FF);
+        k[1] = (lfsr_out & 0x000000000000FF00) >> 8;
+        k[2] = (lfsr_out & 0x0000000000FF0000) >> 16;
+        k[3] = (lfsr_out & 0x00000000FF000000) >> 24;
+        k[4] = (lfsr_out & 0x000000FF00000000) >> 32;
+        k[5] = (lfsr_out & 0x0000FF0000000000) >> 40;
+        k[6] = (lfsr_out & 0x00FF000000000000) >> 48;
+        k[7] = (lfsr_out & 0xFF00000000000000) >> 56;
         if (i == (blocks) && (msglen_extra != 0)) {
             v = msglen_extra; }
         for (int x = 0; x < v; x++) {
