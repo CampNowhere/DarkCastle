@@ -124,7 +124,18 @@ unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char *
 }
 
 unsigned char * ganja_hmac(unsigned char * data, long datalen, unsigned char * D, unsigned char * key, int keylen, unsigned char *salt) {
-    ganja_digest(data, datalen, D, salt, strlen(salt));
+    unsigned char *a[32];
+    unsigned char *b[32];
+    unsigned char c[32];
+    unsigned char k[200];
+    int i;
+    memset(k, key, keylen);
+    ganja_digest(data, datalen, a, salt, strlen(salt));
+    ganja_digest(k, keylen, b, salt, strlen(salt));
+    for (i = 0; i < 32; i++) {
+        c[i] = (uintptr_t)a[i] ^ (uintptr_t)b[i];
+    }
+    ganja_digest(a, keylen, D, salt, strlen(salt));
 }
 
 unsigned char * ganja_kdf(unsigned char * password, int passlen, unsigned char * D, int iterations, int keylen, unsigned char *salt) {
