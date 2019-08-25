@@ -18,6 +18,10 @@ Uvajda 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/Uvajda
 
+WildThing 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
+
+https://github.com/pvial00/WildThing
+
 Dark 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/DarkCipher
