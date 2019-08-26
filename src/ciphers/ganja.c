@@ -23,7 +23,7 @@ uint32_t F2(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
     return (a + b + c + d) & 0xFFFFFFFF;
 }
 
-unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt, int saltlen) {
+unsigned char * ganja_digest(unsigned char * data, long long datalen, unsigned char * D, unsigned char * salt, int saltlen) {
     int rounds = 8 * 8;
     uint32_t H[8] = {0};
     uint32_t temp32[8] = {0};
