@@ -51,3 +51,7 @@ https://github.com/pvial00/BlueDye
 Purple 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/Purple
+
+Spock-CBC 128 bit authenticated with Ganja 256 bit - 128 bit nonce length
+
+https://github.com/pvial00/Spock
