@@ -13,7 +13,7 @@
 #include "ciphers/uvajda.c"
 #include "ciphers/spock_cbc.c"
 
-void dark_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void dark_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -49,7 +49,7 @@ void dark_encrypt(char *infile_name, long fsize, char *outfile_name, int key_len
     free(msg);
 }
 
-void dark_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void dark_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -82,7 +82,7 @@ void dark_decrypt(char *infile_name, long fsize, char *outfile_name, int key_len
     }
 }
 
-void zandercbc_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void zandercbc_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     int extrabytes = 8 - (fsize % 8);
     if (extrabytes != 0) {
         fsize += extrabytes;
@@ -122,7 +122,7 @@ void zandercbc_encrypt(char *infile_name, long fsize, char *outfile_name, int ke
     free(msg);
 }
 
-void zandercbc_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void zandercbc_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -155,7 +155,7 @@ void zandercbc_decrypt(char *infile_name, long fsize, char *outfile_name, int ke
     }
 }
 
-void zanderofb_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void zanderofb_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -191,7 +191,7 @@ void zanderofb_encrypt(char *infile_name, long fsize, char *outfile_name, int ke
     free(msg);
 }
 
-void zanderofb_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void zanderofb_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -224,7 +224,7 @@ void zanderofb_decrypt(char *infile_name, long fsize, char *outfile_name, int ke
     }
 }
 
-void dark64_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void dark64_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -260,7 +260,7 @@ void dark64_encrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     free(msg);
 }
 
-void dark64_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void dark64_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -293,7 +293,7 @@ void dark64_decrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     }
 }
 
-void bluedye_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void bluedye_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -329,7 +329,7 @@ void bluedye_encrypt(char *infile_name, long fsize, char *outfile_name, int key_
     free(msg);
 }
 
-void bluedye_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void bluedye_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -362,7 +362,7 @@ void bluedye_decrypt(char *infile_name, long fsize, char *outfile_name, int key_
     }
 }
 
-void wrzeszcz_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void wrzeszcz_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -398,7 +398,7 @@ void wrzeszcz_encrypt(char *infile_name, long fsize, char *outfile_name, int key
     free(msg);
 }
 
-void wrzeszcz_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void wrzeszcz_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -431,7 +431,7 @@ void wrzeszcz_decrypt(char *infile_name, long fsize, char *outfile_name, int key
     }
  }
 
-void wild_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void wild_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -467,7 +467,7 @@ void wild_encrypt(char *infile_name, long fsize, char *outfile_name, int key_len
     free(msg);
 }
 
-void wild_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void wild_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -500,7 +500,7 @@ void wild_decrypt(char *infile_name, long fsize, char *outfile_name, int key_len
     }
 }
 
-void ganja_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void ganja_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -536,7 +536,7 @@ void ganja_encrypt(char *infile_name, long fsize, char *outfile_name, int key_le
     free(msg);
 }
 
-void ganja_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void ganja_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -569,7 +569,7 @@ void ganja_decrypt(char *infile_name, long fsize, char *outfile_name, int key_le
     }
 }
 
-void purple_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void purple_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -605,7 +605,7 @@ void purple_encrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     free(msg);
 }
 
-void purple_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void purple_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -639,7 +639,7 @@ void purple_decrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     }
 }
 
-void uvajda_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void uvajda_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -675,7 +675,7 @@ void uvajda_encrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     free(msg);
 }
 
-void uvajda_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void uvajda_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -708,7 +708,7 @@ void uvajda_decrypt(char *infile_name, long fsize, char *outfile_name, int key_l
     }
 }
 
-void wildthing_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
+void wildthing_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
     FILE *infile, *outfile;
     unsigned char *msg;
     msg = (unsigned char *) malloc(fsize);
@@ -744,7 +744,7 @@ void wildthing_encrypt(char *infile_name, long fsize, char *outfile_name, int ke
     free(msg);
 }
 
-void wildthing_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void wildthing_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
@@ -777,7 +777,7 @@ void wildthing_decrypt(char *infile_name, long fsize, char *outfile_name, int ke
     }
 }
 
-void spockcbc_encrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void spockcbc_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     int extrabytes = 16 - (fsize % 16);
     FILE *infile, *outfile;
     unsigned char *msg;
@@ -815,7 +815,7 @@ void spockcbc_encrypt(char *infile_name, long fsize, char *outfile_name, int key
     free(msg);
 }
 
-void spockcbc_decrypt(char *infile_name, long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
+void spockcbc_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
     FILE *infile, *outfile;
     unsigned char *mac[mac_length];
     unsigned char *mac_key[key_length];
