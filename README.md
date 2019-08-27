@@ -10,6 +10,11 @@ Please note these are one-shot encryption functions and will encrypt what you ca
 
 DarkCastle is accepting ciphers.  Email pvial00@gmail.com or open a github issue to submit/integrate a cipher, hash function, KDF or authentication method.
 
+Complimenting DarkCastle is DarkPass, a password generator designed to give secure passwords compatible with DarkCastle.
+
+https://github.com/pvial00/DarkPass
+
+
 # Algorithms and authenticators
 
 Recommended cipher is Uvajda
