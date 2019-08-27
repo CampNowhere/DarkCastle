@@ -38,7 +38,7 @@ if mode == "e":
     for f in files:
         fname = f.split("\n")[0]
         fsize = os.path.getsize(fname)
-        if fsize >= 32:
+        if fsize > 0:
             if fname != progname:
                 fnameenc = fname + ".enc"
                 cmd = ['castle', algorithm, '-e', fname, fnameenc, key]
@@ -47,7 +47,7 @@ if mode == "e":
                 out = subprocess.check_output(cmd)
                 print fname
         else:
-            print fname + " doesn't meet the minimum filesize requirement. 32 bytes"
+            print fname + " doesn't meet the minimum filesize requirement. 1 byte"
 
 if mode == "d":
     cmd = ['ls']
@@ -59,7 +59,7 @@ if mode == "d":
     for f in files:
         fname = f.split("\n")[0]
         fsize = os.path.getsize(fname)
-        if fsize >= 32:
+        if fsize > 0:
             if fname != progname:
                 fnametmp = fname.split('.')
                 fnameenc = fnametmp.pop(0)
@@ -74,5 +74,5 @@ if mode == "d":
                 else:
                     print fnameenc + " had an issue."
         else:
-            print fname + " doesn't meet the minimum filesize requirement. 32 bytes"
+            print fname + " doesn't meet the minimum filesize requirement. 1 bytes"
 
