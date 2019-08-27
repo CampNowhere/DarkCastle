@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 6) {
         usage();
-        exit(1);
+        return 0;
     }
 
     FILE *infile, *outfile;
@@ -170,4 +170,5 @@ int main(int argc, char *argv[]) {
             spockcbc_decrypt(infile_name, fsize, outfile_name, spock_key_length, spock_nonce_length, spock_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
+    return 0;
 }
