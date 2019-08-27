@@ -61,3 +61,5 @@ if c == algorithm_count:
     print "Success all algorithms check out"
 else:
     print "One or more algorithms failed"
+cmdrm = ['rm', inputfile]
+out = subprocess.check_output(cmdrm)
