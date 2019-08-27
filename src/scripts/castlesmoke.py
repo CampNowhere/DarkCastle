@@ -44,13 +44,13 @@ for algorithm in algorithms:
     print key
     cmdenc = ['castle', algorithm, '-e', inputfile, 'b1' , key]
     out = subprocess.check_output(cmdenc)
-    print algorithm + "encrypting" + out
+    print algorithm + " encrypting" + out
     cmdhash = ['ganjasum', inputfile]
     h1 = subprocess.check_output(cmdhash)
     
     cmddec = ['castle', algorithm, '-d', 'b1','b2' , key]
     out = subprocess.check_output(cmddec)
-    print algorithm + "decrypting" + out
+    print algorithm + " decrypting" + out
     cmdhash = ['ganjasum', 'b2']
     h2 = subprocess.check_output(cmdhash)
     if h1 != h2:
