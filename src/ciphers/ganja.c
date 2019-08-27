@@ -124,13 +124,13 @@ unsigned char * ganja_core(unsigned char * data, long long datalen, unsigned cha
 }
 
 unsigned char * ganja_digest(unsigned char * data, long datalen, unsigned char * D, unsigned char * salt, int saltlen) {
-    long blocklen = 32;
+    long blocklen = 64;
     if (datalen < blocklen) {
         unsigned char * block[blocklen];
         memset(block, 0, blocklen);
         int i;
         for (i = 0; i < datalen; i++) {
-            block[i] = data[i];
+            block[i] = (uintptr_t)block[i] ^ data[i];
         }
         ganja_core(block, blocklen, D, salt, saltlen);
     }
