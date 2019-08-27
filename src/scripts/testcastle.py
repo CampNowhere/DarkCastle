@@ -46,7 +46,7 @@ while True:
     lines = out.split("\n")
     l = lines[0].split("=")[1].strip()
     print l
-    cmdhash = ['ganjasum', 'b1']
+    cmdhash = ['ganjasum', inputfile]
     h1 = subprocess.check_output(cmdhash)
     
     cmddec = ['castle', alg, '-d', 'b1','b2' , key]
@@ -57,7 +57,7 @@ while True:
     lines = out.split("\n")
     l = lines[0].split("=")[1].strip()
     print l
-    cmdhash = ['ganjasum', 'b1']
+    cmdhash = ['ganjasum', 'b2']
     h2 = subprocess.check_output(cmdhash)
     if h1 != h2:
         print inputfile + " failed to decrypt!"
