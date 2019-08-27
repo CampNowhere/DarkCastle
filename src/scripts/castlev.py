@@ -67,7 +67,7 @@ if mode == "d":
                     fnameenc += "." + fnametmp[x]
                 cmd = ['castle', algorithm, '-d', fname, fnameenc, key]
                 out = subprocess.check_output(cmd)
-                if "message" not in out:
+                if "Message" not in out:
                     cmd = ['rm', fname]
                     out = subprocess.check_output(cmd)
                     print fnameenc
