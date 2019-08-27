@@ -1,6 +1,6 @@
 import subprocess, os, time, sys
 
-#This script assumes that you have the castle, darkpass and ent binaries installed
+#This script assumes that you have the castle, darkpass, ganjasum and ent binaries installed
 
 inputfile = "testfile1"
 testfile_size = 1048576
@@ -41,6 +41,14 @@ while True:
     cmdenc = ['castle', alg, '-e', inputfile, 'b1' , key]
     out = subprocess.check_output(cmdenc)
     print "enc" + out
+    cmdent = ['ent', 'b1']
+    out = subprocess.check_output(cmdent)
+    lines = out.split("\n")
+    l = lines[0].split("=")[1].strip()
+    print l
+    cmdhash = ['ganjasum', 'b1']
+    h1 = subprocess.check_output(cmdhash)
+    
     cmddec = ['castle', alg, '-d', 'b1','b2' , key]
     out = subprocess.check_output(cmddec)
     print "dec" + out
@@ -49,4 +57,10 @@ while True:
     lines = out.split("\n")
     l = lines[0].split("=")[1].strip()
     print l
+    cmdhash = ['ganjasum', 'b1']
+    h2 = subprocess.check_output(cmdhash)
+    if h1 != h2:
+        print inputfile + " failed to decrypt!"
+    else:
+       print "Sucess!"
     time.sleep(0.5)
