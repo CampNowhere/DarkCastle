@@ -62,5 +62,5 @@ while True:
     if h1 != h2:
         print inputfile + " failed to decrypt!"
     else:
-       print "Sucess!"
+       print "Success!"
     time.sleep(0.5)
