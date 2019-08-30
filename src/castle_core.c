@@ -3,7 +3,6 @@
 #include <string.h>
 #include "ciphers/dyefamily.c"
 #include "ciphers/darkcipher.c"
-#include "ciphers/dark64.c"
 #include "ciphers/ganja.c"
 #include "ciphers/zanderfish_cbc.c"
 #include "ciphers/zanderfish_ofb.c"

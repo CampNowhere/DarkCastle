@@ -3,6 +3,14 @@
 #include <string.h>
 #include <stdint.h>
 
+int keylen = 32;
+uint64_t r[8] = {0};
+uint64_t j = 0;
+
+uint64_t rotateleft64(uint64_t a, uint64_t b) {
+    return ((a << b) | (a >> (64 - b)));
+}
+
 void uvajda_F(uint64_t j) {
     int i;
     uint64_t x;
@@ -53,6 +61,12 @@ void uvajda_keysetup(unsigned char *key, unsigned char *nonce) {
     }
 }
 
+void * uvajda_reset() {
+    int i;
+    memset(r, 0, 8*(sizeof(uint64_t)));
+    j = 0;
+}
+
 void * uvajda_crypt(unsigned char * data, unsigned char * key, unsigned char * nonce, long datalen) {
     long c = 0;
     int i = 0;
@@ -85,4 +99,5 @@ void * uvajda_crypt(unsigned char * data, unsigned char * key, unsigned char * n
 	    c += 1;
 	}
     }
+    uvajda_reset();
 }
