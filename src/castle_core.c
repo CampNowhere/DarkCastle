@@ -12,6 +12,7 @@
 #include "ciphers/uvajda.c"
 #include "ciphers/spock_cbc.c"
 #include "kdf/manja.c"
+#include "hmac/ghmac.c"
 #include "crypto_funcs.c"
 
 void dark_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int nonce_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) { 
