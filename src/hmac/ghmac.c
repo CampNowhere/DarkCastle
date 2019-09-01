@@ -38,9 +38,9 @@ void * ganja_hmac(unsigned char *data, long long datalen, unsigned char * D, uns
     s = 0;
     m = 0x00000001;
     for (i = 0; i < (keylen / 4); i++) {
-        W[i] ^= (key[s] << 24) + (key[s+1] << 16) + (key[s+2] << 8) + key[s+3];
-        H[i] ^= (key[s] << 24) + (key[s+1] << 16) + (key[s+2] << 8) + key[s+3];
-        W[i] = (W[i] + m + H[i]) & 0xFFFFFFFF;
+        W[i & 0x07] ^= (key[s] << 24) + (key[s+1] << 16) + (key[s+2] << 8) + key[s+3];
+        H[i & 0x07] ^= (key[s] << 24) + (key[s+1] << 16) + (key[s+2] << 8) + key[s+3];
+        W[i & 0x07] = (W[i & 0x07] + m + H[i & 0x07]) & 0xFFFFFFFF;
         s += 4;
     }
         

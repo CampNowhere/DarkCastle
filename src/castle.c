@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.3.1 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\npurple         256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\namagus         256 bit\n\n");
+    printf("DarkCastle v0.3.2 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\nzanderfish-ofb 256 bit\nzanderfish-cbc 256 bit\ndark           256 bit\nwrzeszcz       256 bit\nbluedye        256 bit\nwild           128 bit\nganja          256 bit\npurple         256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\namagus         256 bit\namagus512      512 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
     int uvajda_key_length = 32;
     int spock_key_length = 16;
     int amagus_key_length = 32;
+    int amagus512_key_length = 64;
 
     int dark_mac_length = 32;
     int bluedye_mac_length = 32;
@@ -173,6 +174,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             amagus_decrypt(infile_name, fsize, outfile_name, amagus_key_length, amagus_nonce_length, amagus_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "amagus512") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            amagus_encrypt(infile_name, fsize, outfile_name, amagus512_key_length, amagus_nonce_length, amagus_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            amagus_decrypt(infile_name, fsize, outfile_name, amagus512_key_length, amagus_nonce_length, amagus_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     return 0;
