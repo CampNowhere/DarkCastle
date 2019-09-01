@@ -20,7 +20,6 @@ uint64_t amagus_rr(uint64_t a, uint64_t b) {
 
 void *amagus_F(struct amagus_state *state) {
     int r;
-    uint64_t x;
     for (r = 0; r < amagus_rounds; r++) {
         state->r[0] += state->r[6];
         state->r[1] ^= state->r[15];
