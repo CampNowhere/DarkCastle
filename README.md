@@ -14,7 +14,7 @@ Complimenting DarkCastle is DarkPass, a password generator designed to give secu
 
 https://github.com/pvial00/DarkPass
 
-*** Tested on MacOS, FreeBSD, Linux, Solaris, OpenBSD
+*** Tested on MacOS, FreeBSD, Linux, Solaris, OpenBSD, NetBSD
 
 
 # Algorithms and authenticators
