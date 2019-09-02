@@ -19,7 +19,7 @@ https://github.com/pvial00/DarkPass
 
 # Algorithms and authenticators
 
-Recommended cipher is Uvajda or Amagus
+Recommended cipher is Amagus/Uvajda/Spock
 
 Fastest cipher is WildThing
 
