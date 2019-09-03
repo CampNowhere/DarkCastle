@@ -19,7 +19,7 @@ https://github.com/pvial00/DarkPass
 
 # Algorithms and authenticators
 
-Recommended cipher is Amagus/Uvajda/Spock
+Recommended cipher is Amagus/Uvajda/Spock/Specjal
 
 Fastest cipher is WildThing
 
@@ -62,3 +62,7 @@ https://github.com/pvial00/Purple
 Spock-CBC 128/256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/Spock
+
+Specjal-CBC 256/512/1024 bit authenticated with Ganja 256 bit - 128 bit nonce length
+
+https://github.com/pvial00/Specjal
