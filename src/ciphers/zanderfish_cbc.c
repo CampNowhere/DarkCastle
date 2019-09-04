@@ -51,7 +51,7 @@ void gen_subkeys(unsigned char * key, int keylen, unsigned char * iv, int ivlen,
 void gen_sbox(unsigned char * key, int keylen) {
     int i;
     int s;
-    int j;
+    int j = 0;
     int temp;
     for (s = 0; s < 4; s++) {
         for (i = 0; i < 256; i++) {
