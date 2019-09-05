@@ -512,9 +512,9 @@ void spockcbc_encrypt(char *infile_name, long long fsize, char *outfile_name, in
     manja_kdf(password, strlen(password), key, key_length, kdf_salt, strlen(kdf_salt), kdf_iterations);
     infile = fopen(infile_name, "rb");
     outfile = fopen(outfile_name, "wb");
-    unsigned char *kwnonce[keywrap512_ivlen];
+    unsigned char *kwnonce[keywrap128_ivlen];
     key_wrap_encrypt(keyprime, key_length, key, K, kwnonce);
-    fwrite(kwnonce, 1, keywrap512_ivlen, outfile);
+    fwrite(kwnonce, 1, keywrap128_ivlen, outfile);
     unsigned char iv[iv_length];
     amagus_random(&iv, iv_length);
     fwrite(iv, 1, iv_length, outfile);
@@ -1216,8 +1216,8 @@ void zanderCcbc_decrypt(char *infile_name, long long fsize, char *outfile_name, 
         msg = (unsigned char *) malloc(fsize-mac_length-iv_length-key_length-keywrap512_ivlen);
         unsigned char *iv[iv_length];
         fseek(infile, mac_length, SEEK_SET);
-        unsigned char *kwnonce[keywrap128_ivlen];
-        fread(kwnonce, 1, keywrap128_ivlen, infile);
+        unsigned char *kwnonce[keywrap512_ivlen];
+        fread(kwnonce, 1, keywrap512_ivlen, infile);
         fread(iv, 1, iv_length, infile);
         fread(keyprime, 1, key_length, infile);
         key_wrap_decrypt(keyprime, key_length, key, kwnonce);
