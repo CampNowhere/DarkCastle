@@ -99,3 +99,16 @@ void * amagus_crypt(unsigned char * data, unsigned char * key, int keylen, unsig
 	}
     }
 }
+
+unsigned char * amagus_random (unsigned char *buf, int num_bytes) {
+    int keylen = 128;
+    int noncelen = 16;
+    unsigned char *key[keylen];
+    unsigned char *nonce[noncelen];
+    FILE *randfile;
+    randfile = fopen("/dev/urandom", "rb");
+    fread(nonce, noncelen, 1, randfile);
+    fread(key, keylen, 1, randfile);
+    fclose(randfile);
+    amagus_crypt(buf, key, keylen, nonce, num_bytes);
+}

@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 int zblocklen = 16;
+int rounds = 16;
 
 struct zander_state {
     int S[8][256];
