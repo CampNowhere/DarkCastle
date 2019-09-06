@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
             spockcbc_decrypt(infile_name, fsize, outfile_name, spock256_key_length, spock_nonce_length, spock_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
-    else if (strcmp(algorithm, "specjal-cbc") == 0) {
+    else if (strcmp(algorithm, "specjal") == 0) {
         if (strcmp(mode, encrypt_symbol) == 0) {
             specjalcbc_encrypt(infile_name, fsize, outfile_name, specjal_key_length, specjal_nonce_length, specjal_mac_length, kdf_iterations, kdf_salt, password);
         }
@@ -182,7 +182,7 @@ int main(int argc, char *argv[]) {
             specjalcbc_decrypt(infile_name, fsize, outfile_name, specjal_key_length, specjal_nonce_length, specjal_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
-    else if (strcmp(algorithm, "specjal512-cbc") == 0) {
+    else if (strcmp(algorithm, "specjal512") == 0) {
         if (strcmp(mode, encrypt_symbol) == 0) {
             specjalcbc512_encrypt(infile_name, fsize, outfile_name, specjal512_key_length, specjal_nonce_length, specjal_mac_length, kdf_iterations, kdf_salt, password);
         }
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
             specjalcbc512_decrypt(infile_name, fsize, outfile_name, specjal512_key_length, specjal_nonce_length, specjal_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
-    else if (strcmp(algorithm, "specjal1024-cbc") == 0) {
+    else if (strcmp(algorithm, "specjal1024") == 0) {
         if (strcmp(mode, encrypt_symbol) == 0) {
             specjalcbc1024_encrypt(infile_name, fsize, outfile_name, specjal1024_key_length, specjal_nonce_length, specjal_mac_length, kdf_iterations, kdf_salt, password);
         }
