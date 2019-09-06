@@ -1140,8 +1140,8 @@ void zCgen_subkeys(struct zanderC_state * state, unsigned char * key, int keylen
 	state->K[i] = kstate.o;
     }
     for (i = 0; i < 256; i++) {
-        state->K[i & 0x1F] ^= C2[i];
-        state->KB[i & 0x1F] ^= C3[i];
+        state->K[i & 0x0F] ^= C2[i];
+        state->KB[i & 0x0F] ^= C3[i];
     }
     for (i = 0; i < zrounds; i++) {
 	state->KP[i] = kstate.r[i];

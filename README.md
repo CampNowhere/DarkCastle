@@ -47,13 +47,13 @@ ZanderfishC 512 bit authenticated with Ganja 256 bit - 64 bit IV length
 
 https://github.com/pvial00/ZanderfishC
 
+ZanderfishU 1024 bit authenticated with Ganja 256 bit - 64 bit IV length
+
+https://github.com/pvial00/ZanderfishU
+
 Wild 128 bit authenticated with Ganja 256 bit - 64 bit nonce length
 
 https://github.com/pvial00/WildLFSR
-
-Purple 256 bit authenticated with Ganja 256 bit - 128 bit nonce length
-
-https://github.com/pvial00/Purple
 
 Spock-CBC 128/256 bit authenticated with Ganja 256 bit - 128 bit nonce length
 

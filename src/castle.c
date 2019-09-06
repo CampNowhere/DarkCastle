@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.4.1 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\ndark           256 bit\nwild           128 bit\nganja          256 bit\npurple         256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\nspock256-cbc   256 bit\namagus         256 bit\namagus512      512 bit\namagus1024     1024 bit\nspecjal        256 bit\nspecjal512     512 bit\nspecjal1024    1024 bit\nzanderfish2-cbc 256 bit\nzanderfish2-ofb 256 bit\nzanderfishC    512 bit\n\n");
+    printf("DarkCastle v0.4.2 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\ndark           256 bit\nwild           128 bit\nganja          256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\nspock256-cbc   256 bit\namagus         256 bit\namagus512      512 bit\namagus1024     1024 bit\nspecjal        256 bit\nspecjal512     512 bit\nspecjal1024    1024 bit\nzanderfish2-cbc 256 bit\nzanderfish2-ofb 256 bit\nzanderfishC    512 bit\nzanderfishU    1024 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -20,11 +20,11 @@ int main(int argc, char *argv[]) {
 
     int zanderfish2_nonce_length = 16;
     int zanderfishC_nonce_length = 16;
+    int zanderfishU_nonce_length = 16;
     int dark_nonce_length = 16;
     int wild_nonce_length = 8;
     int wildthing_nonce_length = 16;
     int ganja_nonce_length = 16;
-    int purple_nonce_length = 16;
     int uvajda_nonce_length = 16;
     int spock_nonce_length = 16;
     int amagus_nonce_length = 16;
@@ -33,11 +33,11 @@ int main(int argc, char *argv[]) {
     int zanderfish_key_length = 32;
     int zanderfish2_key_length = 32;
     int zanderfishC_key_length = 64;
+    int zanderfishU_key_length = 128;
     int dark_key_length = 32;
     int wild_key_length = 16;
     int wildthing_key_length = 32;
     int ganja_key_length = 32;
-    int purple_key_length = 32;
     int uvajda_key_length = 32;
     int spock_key_length = 16;
     int spock256_key_length = 32;
@@ -52,10 +52,10 @@ int main(int argc, char *argv[]) {
     int zanderfish_mac_length = 32;
     int zanderfish2_mac_length = 32;
     int zanderfishC_mac_length = 32;
+    int zanderfishU_mac_length = 32;
     int wild_mac_length = 32;
     int wildthing_mac_length = 32;
     int ganja_mac_length = 32;
-    int purple_mac_length = 32;
     int uvajda_mac_length = 32;
     int spock_mac_length = 32;
     int amagus_mac_length = 32;
@@ -108,14 +108,6 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             ganja_decrypt(infile_name, fsize, outfile_name, ganja_key_length, ganja_nonce_length, ganja_mac_length, kdf_iterations, kdf_salt, password);
-        }
-    }
-    else if (strcmp(algorithm, "purple") == 0) {
-        if (strcmp(mode, encrypt_symbol) == 0) {
-            purple_encrypt(infile_name, fsize, outfile_name, purple_key_length, purple_nonce_length, purple_mac_length, kdf_iterations, kdf_salt, password);
-        }
-        else if (strcmp(mode, decrypt_symbol) == 0) {
-            purple_decrypt(infile_name, fsize, outfile_name, purple_key_length, purple_nonce_length, purple_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     else if (strcmp(algorithm, "uvajda") == 0) {
@@ -220,6 +212,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             zanderCcbc_decrypt(infile_name, fsize, outfile_name, zanderfishC_key_length, zanderfishC_nonce_length, zanderfishC_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "zanderfishU") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            zanderUcbc_encrypt(infile_name, fsize, outfile_name, zanderfishU_key_length, zanderfishU_nonce_length, zanderfishU_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            zanderUcbc_decrypt(infile_name, fsize, outfile_name, zanderfishU_key_length, zanderfishU_nonce_length, zanderfishU_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     return 0;
