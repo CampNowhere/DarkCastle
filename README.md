@@ -43,15 +43,19 @@ Zanderfish2 256 bit authenticated with Ganja 256 bit - 128 bit IV length
 
 https://github.com/pvial00/Zanderfish2
 
-ZanderfishC 512 bit authenticated with Ganja 256 bit - 64 bit IV length
+Zanderfish3 256 bit authenticated with Ganja 256 bit - 256 bit IV length
+
+https://github.com/pvial00/Zanderfish3
+
+ZanderfishC 512 bit authenticated with Ganja 256 bit - 128 bit IV length
 
 https://github.com/pvial00/ZanderfishC
 
-ZanderfishU 1024 bit authenticated with Ganja 256 bit - 64 bit IV length
+ZanderfishU 1024 bit authenticated with Ganja 256 bit - 128 bit IV length
 
 https://github.com/pvial00/ZanderfishU
 
-Wild 128 bit authenticated with Ganja 256 bit - 64 bit nonce length
+Wild 128 bit authenticated with Ganja 256 bit - 128 bit nonce length
 
 https://github.com/pvial00/WildLFSR
 
