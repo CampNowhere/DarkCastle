@@ -3,3 +3,5 @@ v0.4 - Added nonce/iv for key wrapping.  Dropped algorithms BlueDye, Wrzeszcz, t
 v0.4.1 - Add Zanderfish2 in OFB mode - 256 bit
 
 v0.4.3 - Fix WildThing, Drop Ganja as a cipher, add ZanderFish3 256 bit, ZanderFish code cleanup
+
+v0.4.4 - More code cleanup, Drop Wild and leave Spock as the only 128 bit cipher, Add ZanderFish2 CTR mode
