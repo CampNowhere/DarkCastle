@@ -9,6 +9,7 @@
 #include "ciphers/zanderfish3_cbc.c"
 #include "ciphers/zanderfishC_cbc.c"
 #include "ciphers/zanderfishU_cbc.c"
+#include "ciphers/wild.c"
 #include "ciphers/wildthing.c"
 #include "ciphers/uvajda.c"
 #include "ciphers/spock_cbc.c"
