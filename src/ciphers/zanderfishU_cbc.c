@@ -68,7 +68,6 @@ void zUgen_subkeys(struct zanderU_state * state, unsigned char * key, int keylen
     struct zUksa_state kstate;
     int c = 0;
     int i;
-    uint64_t keytemp[(keylen /8)];
     memset(state->K, 0, 16*sizeof(uint64_t));
     memset(state->KB, 0, 16*sizeof(uint64_t));
     memset(state->KP, 0, 16*sizeof(uint64_t));
@@ -79,8 +78,6 @@ void zUgen_subkeys(struct zanderU_state * state, unsigned char * key, int keylen
     memset(state->next, 0, 2*sizeof(uint64_t));
 
     for (i = 0; i < (keylen / 8); i++) {
-        keytemp[i] = 0;
-        keytemp[i] = ((uint64_t)key[c] << 56) + ((uint64_t)key[c+1] << 48) + ((uint64_t)key[c+2] << 40) + ((uint64_t)key[c+3] << 32) + ((uint64_t)key[c+4] << 24) + ((uint64_t)key[c+5] << 16) + ((uint64_t)key[c+6] << 8) + (uint64_t)key[c+7];
         kstate.r[i] = ((uint64_t)key[c] << 56) + ((uint64_t)key[c+1] << 48) + ((uint64_t)key[c+2] << 40) + ((uint64_t)key[c+3] << 32) + ((uint64_t)key[c+4] << 24) + ((uint64_t)key[c+5] << 16) + ((uint64_t)key[c+6] << 8) + (uint64_t)key[c+7];
         c += 8;
     }

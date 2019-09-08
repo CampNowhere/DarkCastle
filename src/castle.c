@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.4.2 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\ndark           256 bit\nwild           128 bit\nganja          256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\nspock256-cbc   256 bit\namagus         256 bit\namagus512      512 bit\namagus1024     1024 bit\nspecjal        256 bit\nspecjal512     512 bit\nspecjal1024    1024 bit\nzanderfish2-cbc 256 bit\nzanderfish2-ofb 256 bit\nzanderfishC    512 bit\nzanderfishU    1024 bit\n\n");
+    printf("DarkCastle v0.4.3 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\ndark           256 bit\nwild           128 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\nspock256-cbc   256 bit\namagus         256 bit\namagus512      512 bit\namagus1024     1024 bit\nspecjal        256 bit\nspecjal512     512 bit\nspecjal1024    1024 bit\nzanderfish2-cbc 256 bit\nzanderfish2-ofb 256 bit\nzanderfishC    512 bit\nzanderfishU    1024 bit\nzanderfish3    256 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -19,12 +19,12 @@ int main(int argc, char *argv[]) {
     char *decrypt_symbol = "-d";
 
     int zanderfish2_nonce_length = 16;
+    int zanderfish3_nonce_length = 32;
     int zanderfishC_nonce_length = 16;
     int zanderfishU_nonce_length = 16;
     int dark_nonce_length = 16;
     int wild_nonce_length = 8;
     int wildthing_nonce_length = 16;
-    int ganja_nonce_length = 16;
     int uvajda_nonce_length = 16;
     int spock_nonce_length = 16;
     int amagus_nonce_length = 16;
@@ -32,12 +32,12 @@ int main(int argc, char *argv[]) {
 
     int zanderfish_key_length = 32;
     int zanderfish2_key_length = 32;
+    int zanderfish3_key_length = 32;
     int zanderfishC_key_length = 64;
     int zanderfishU_key_length = 128;
     int dark_key_length = 32;
     int wild_key_length = 16;
     int wildthing_key_length = 32;
-    int ganja_key_length = 32;
     int uvajda_key_length = 32;
     int spock_key_length = 16;
     int spock256_key_length = 32;
@@ -51,11 +51,11 @@ int main(int argc, char *argv[]) {
     int dark_mac_length = 32;
     int zanderfish_mac_length = 32;
     int zanderfish2_mac_length = 32;
+    int zanderfish3_mac_length = 32;
     int zanderfishC_mac_length = 32;
     int zanderfishU_mac_length = 32;
     int wild_mac_length = 32;
     int wildthing_mac_length = 32;
-    int ganja_mac_length = 32;
     int uvajda_mac_length = 32;
     int spock_mac_length = 32;
     int amagus_mac_length = 32;
@@ -100,14 +100,6 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             wild_decrypt(infile_name, fsize, outfile_name, wild_key_length, wild_nonce_length, wild_mac_length, kdf_iterations, kdf_salt, password);
-        }
-    }
-    else if (strcmp(algorithm, "ganja") == 0) {
-        if (strcmp(mode, encrypt_symbol) == 0) {
-            ganja_encrypt(infile_name, fsize, outfile_name, ganja_key_length, ganja_nonce_length, ganja_mac_length, kdf_iterations, kdf_salt, password);
-        }
-        else if (strcmp(mode, decrypt_symbol) == 0) {
-            ganja_decrypt(infile_name, fsize, outfile_name, ganja_key_length, ganja_nonce_length, ganja_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     else if (strcmp(algorithm, "uvajda") == 0) {
@@ -204,6 +196,14 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             zander2ofb_decrypt(infile_name, fsize, outfile_name, zanderfish2_key_length, zanderfish2_nonce_length, zanderfish2_mac_length, kdf_iterations, kdf_salt, password);
+        }
+    }
+    else if (strcmp(algorithm, "zanderfish3") == 0) {
+        if (strcmp(mode, encrypt_symbol) == 0) {
+            zander3cbc_encrypt(infile_name, fsize, outfile_name, zanderfish3_key_length, zanderfish3_nonce_length, zanderfish3_mac_length, kdf_iterations, kdf_salt, password);
+        }
+        else if (strcmp(mode, decrypt_symbol) == 0) {
+            zander3cbc_decrypt(infile_name, fsize, outfile_name, zanderfish3_key_length, zanderfish3_nonce_length, zanderfish3_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     else if (strcmp(algorithm, "zanderfishC") == 0) {

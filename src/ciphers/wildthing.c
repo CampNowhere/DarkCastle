@@ -32,11 +32,11 @@ uint64_t wt_sumup(struct wildthing_state *state) {
 }
 
 uint64_t rotateall(struct wildthing_state *state) {
-    wt_rotateleft64(state->lfsr[0], 2);
-    wt_rotateleft64(state->lfsr[1], 7);
-    wt_rotateleft64(state->lfsr[2], 9);
-    wt_rotateleft64(state->lfsr[3], 12);
-    wt_rotateleft64(state->lfsr[4], 5);
+    state->lfsr[0] = wt_rotateleft64(state->lfsr[0], 2);
+    state->lfsr[1] = wt_rotateleft64(state->lfsr[1], 7);
+    state->lfsr[2] = wt_rotateleft64(state->lfsr[2], 9);
+    state->lfsr[3] = wt_rotateleft64(state->lfsr[3], 12);
+    state->lfsr[4] = wt_rotateleft64(state->lfsr[4], 5);
 }
 
 

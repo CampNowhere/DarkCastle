@@ -1,3 +1,5 @@
 v0.4 - Added nonce/iv for key wrapping.  Dropped algorithms BlueDye, Wrzeszcz, the original ZanderFish.  Corrected key wrapping for Specjal at 512 and 1024 bit key lengths.  Replaced wrzeszcz_random with amagus_random.  This version is not backward compatible and is considered stable.
 
 v0.4.1 - Add Zanderfish2 in OFB mode - 256 bit
+
+v0.4.3 - Fix WildThing, Drop Ganja as a cipher, add ZanderFish3 256 bit, ZanderFish code cleanup
