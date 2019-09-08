@@ -7,3 +7,5 @@ v0.4.3 - Fix WildThing, Drop Ganja as a cipher, add ZanderFish3 256 bit, ZanderF
 v0.4.4 - More code cleanup, Drop Wild and leave Spock as the only 128 bit cipher, Add ZanderFish2 CTR mode
 
 v0.4.5 fix 0.4.4, Wild is still in the code base as the key wrapper for Spock
+
+v0.4.6 - Fixed mixing algorithm in ZanderFish3 and tweak placement

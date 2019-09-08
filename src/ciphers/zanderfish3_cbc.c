@@ -102,24 +102,24 @@ uint64_t z3block_encrypt(struct zander3_state * state, uint64_t *xl, uint64_t *x
     Xq = *xq;
 
     for (i = 0; i < z3rounds; i++) {
-        Xr = Xr + state->K[i][0] + t0;
-        Xl = Xl + state->K[i][1] + t1;
-        Xp = Xp + state->K[i][2] + t2;
-        Xq = Xq + state->K[i][3] + t3;
+        Xr = Xr + state->K[i][0];
+        Xl = Xl + state->K[i][1];
+        Xp = Xp + state->K[i][2];
+        Xq = Xq + state->K[i][3];
 
-        Xr += Xl;
+        Xr += Xl + t0;
         Xl = zander3_rotl(Xl, 9);
         Xl = Xl ^ Xp;
-        Xp += Xq;
+        Xl += Xq + t1;
         Xq = zander3_rotl(Xq, 13);
         Xq = Xq ^ Xr;
-        Xq += Xp;
+        Xq += Xp + t2;
         Xp = zander3_rotl(Xp, 7);
         Xp = Xp ^ Xl;
-        Xp += Xr;
+        Xp += Xr + t3;
         Xr = zander3_rotl(Xr, 3);
         Xr = Xr ^ Xq;
-
+        
         Xr += Xp;
         Xl += Xq;
         Xp += Xr;
@@ -156,21 +156,21 @@ uint64_t z3block_decrypt(struct zander3_state * state, uint64_t *xl, uint64_t *x
 
         Xr = Xr ^ Xq;
         Xr = zander3_rotr(Xr, 3);
-        Xp -= Xr;
+        Xp -= Xr + t3;
         Xp = Xp ^ Xl;
         Xp = zander3_rotr(Xp, 7);
-        Xq -= Xp;
+        Xq -= Xp + t2;
         Xq = Xq ^ Xr;
         Xq = zander3_rotr(Xq, 13);
-        Xp -= Xq;
+        Xl -= Xq + t1;
         Xl = Xl ^ Xp;
         Xl = zander3_rotr(Xl, 9);
-        Xr -= Xl;
+        Xr -= Xl + t0;
 
-        Xq -= state->K[i][3] + t3;
-        Xp -= state->K[i][2] + t2;
-        Xl -= state->K[i][1] + t1;
-        Xr -=  state->K[i][0] + t0;
+        Xq -= state->K[i][3];
+        Xp -= state->K[i][2];
+        Xl -= state->K[i][1];
+        Xr -=  state->K[i][0];
 
     }
     *xl = Xl;
