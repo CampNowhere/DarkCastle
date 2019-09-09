@@ -43,7 +43,10 @@ for algorithm in algorithms:
     key = getkey(passlen)
     print key
     cmdenc = ['castle', algorithm, '-e', inputfile, 'b1' , key]
-    out = subprocess.check_output(cmdenc)
+    try:
+        out = subprocess.check_output(cmdenc)
+    except subprocess.CalledProcessError as ier:
+        print algorithm + " failed to encrypt"
     print algorithm + " encrypting" + out
     cmdhash = ['ganjasum', inputfile]
     h1 = subprocess.check_output(cmdhash)
