@@ -9,3 +9,5 @@ v0.4.4 - More code cleanup, Drop Wild and leave Spock as the only 128 bit cipher
 v0.4.5 fix 0.4.4, Wild is still in the code base as the key wrapper for Spock
 
 v0.4.6 - Fixed mixing algorithm in ZanderFish3 and tweak placement
+
+v0.4.7 - Added some word swaps to ZanderFish3.  Should be the last change in the design.
