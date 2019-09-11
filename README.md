@@ -19,7 +19,7 @@ https://github.com/pvial00/DarkPass
 
 # Algorithms and authenticators
 
-Recommended ciphers are Dark/ZanderFish2/Spock as they have been vetted more than the others
+Recommended ciphers are Amagus/ZanderFish2/Dark/Spock as they have been vetted more than the others
 
 Fastest cipher is WildThing
 
