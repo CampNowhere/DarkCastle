@@ -4,70 +4,71 @@
 #include <stdint.h>
 
 int keylen = 32;
-uint64_t r[8] = {0};
-uint64_t j = 0;
+
+struct uvajda_state {
+     uint64_t r[8];
+     uint64_t j;
+};
 
 uint64_t rotateleft64(uint64_t a, uint64_t b) {
     return ((a << b) | (a >> (64 - b)));
 }
 
-void uvajda_F(uint64_t j) {
+void uvajda_F(struct uvajda_state *state) {
     int i;
     uint64_t x;
     uint64_t y[8];
     for (i = 0; i < 8; i++) {
-        y[i] = r[i];
+        y[i] = state->r[i];
     }
     for (i = 0; i < 8; i++) {
-        x = r[i];
-	r[i] = (r[i] + r[(i + 1) & 0x07] + j);
-	r[i] = r[i] ^ x;
-	r[i] = rotateleft64(r[i], 9);
-	j = (j + r[i]);
+        x = state->r[i];
+	state->r[i] = (state->r[i] + state->r[(i + 1) & 0x07] + state->j);
+	state->r[i] = state->r[i] ^ x;
+	state->r[i] = rotateleft64(state->r[i], 9);
+	state->j = (state->j + state->r[i]);
     }
     for (i = 0; i < 8; i++) {
-        r[i] = r[i] ^ y[i];
+        state->r[i] = state->r[i] + y[i];
     }
 }
 
-void uvajda_keysetup(unsigned char *key, unsigned char *nonce) {
+void uvajda_keysetup(struct uvajda_state *state, unsigned char *key, unsigned char *nonce) {
+    memset(state->r, 0, 8*(sizeof(uint64_t)));
     uint64_t n[4];
     int i;
     int m = 0;
     int inc = 8;
     for (i = 0; i < (keylen / 8); i++) {
-        r[i] = ((uint64_t)(key[m]) << 56) + ((uint64_t)key[m+1] << 48) + ((uint64_t)key[m+2] << 40) + ((uint64_t)key[m+3] << 32) + ((uint64_t)key[m+4] << 24) + ((uint64_t)key[m+5] << 16) + ((uint64_t)key[m+6] << 8) + (uint64_t)key[m+7];
+        state->r[i] = 0;
+        state->r[i] = ((uint64_t)(key[m]) << 56) + ((uint64_t)key[m+1] << 48) + ((uint64_t)key[m+2] << 40) + ((uint64_t)key[m+3] << 32) + ((uint64_t)key[m+4] << 24) + ((uint64_t)key[m+5] << 16) + ((uint64_t)key[m+6] << 8) + (uint64_t)key[m+7];
         m += inc;
     }
    
     n[0] = ((uint64_t)nonce[0] << 56) + ((uint64_t)nonce[1] << 48) + ((uint64_t)nonce[2] << 40) + ((uint64_t)nonce[3] << 32) + ((uint64_t)nonce[4] << 24) + ((uint64_t)nonce[5] << 16) + ((uint64_t)nonce[6] << 8) + (uint64_t)nonce[7];
     n[1] = ((uint64_t)nonce[8] << 56) + ((uint64_t)nonce[9] << 48) + ((uint64_t)nonce[10] << 40) + ((uint64_t)nonce[11] << 32) + ((uint64_t)nonce[12] << 24) + ((uint64_t)nonce[13] << 16) + ((uint64_t)nonce[14] << 8) + (uint64_t)nonce[15];
 
-    r[0] = r[0] ^ n[0];
-    r[1] = r[1] ^ n[1];
+    state->r[0] = state->r[0] ^ n[0];
+    state->r[1] = state->r[1] ^ n[1];
 
+    state->j = 0;
 
     for (int i = 0; i < 8; i++) {
-        j = (j + r[i]);
+        state->j = (state->j + state->r[i]);
     }
     for (int i = 0; i < 2; i++) {
-        uvajda_F(j);
+        uvajda_F(state);
     }
     for (int i = 0; i < 8; i++) {
-        j = (j + r[i]);
+        state->j = (state->j + state->r[i]);
     }
     for (int i = 0; i < 62; i++) {
-        uvajda_F(j);
+        uvajda_F(state);
     }
-}
-
-void * uvajda_reset() {
-    int i;
-    memset(r, 0, 8*(sizeof(uint64_t)));
-    j = 0;
 }
 
 void * uvajda_crypt(unsigned char * data, unsigned char * key, unsigned char * nonce, long datalen) {
+    struct uvajda_state state;
     long c = 0;
     int i = 0;
     int l = 8;
@@ -78,10 +79,10 @@ void * uvajda_crypt(unsigned char * data, unsigned char * key, unsigned char * n
     if (extra != 0) {
         blocks += 1;
     }
-    uvajda_keysetup(key, nonce);
+    uvajda_keysetup(&state, key, nonce);
     for (long b = 0; b < blocks; b++) {
-        uvajda_F(j);
-        output = (((((((r[0] + r[6]) ^ r[1]) + r[5]) ^ r[2]) + r[4]) ^ r[3]) + r[7]);
+        uvajda_F(&state);
+        output = (((((((state.r[0] + state.r[6]) ^ state.r[1]) + state.r[5]) ^ state.r[2]) + state.r[4]) ^ state.r[3]) + state.r[7]);
         k[0] = (output & 0x00000000000000FF);
         k[1] = (output & 0x000000000000FF00) >> 8;
         k[2] = (output & 0x0000000000FF0000) >> 16;
@@ -99,5 +100,4 @@ void * uvajda_crypt(unsigned char * data, unsigned char * key, unsigned char * n
 	    c += 1;
 	}
     }
-    uvajda_reset();
 }

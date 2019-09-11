@@ -42,7 +42,7 @@ c = 0
 for algorithm in algorithms:
     key = getkey(passlen)
     print key
-    cmdenc = ['castle', algorithm, '-e', inputfile, 'b1' , key]
+    cmdenc = ['castle', algorithm, '-e', inputfile, '.b1' , key]
     try:
         out = subprocess.check_output(cmdenc)
     except subprocess.CalledProcessError as ier:
@@ -51,10 +51,10 @@ for algorithm in algorithms:
     cmdhash = ['ganjasum', inputfile]
     h1 = subprocess.check_output(cmdhash)
     
-    cmddec = ['castle', algorithm, '-d', 'b1','b2' , key]
+    cmddec = ['castle', algorithm, '-d', '.b1','.b2' , key]
     out = subprocess.check_output(cmddec)
     print algorithm + " decrypting" + out
-    cmdhash = ['ganjasum', 'b2']
+    cmdhash = ['ganjasum', '.b2']
     h2 = subprocess.check_output(cmdhash)
     if h1 != h2:
         print inputfile + " failed to decrypt!"
@@ -65,4 +65,8 @@ if c == algorithm_count:
 else:
     print "One or more algorithms failed"
 cmdrm = ['rm', inputfile]
+out = subprocess.check_output(cmdrm)
+cmdrm = ['rm', '.b1']
+out = subprocess.check_output(cmdrm)
+cmdrm = ['rm', '.b2']
 out = subprocess.check_output(cmdrm)

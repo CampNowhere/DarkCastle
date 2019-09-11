@@ -4,18 +4,16 @@
 #include <stdint.h>
 
 int z3blocklen = 32;
-int z3rounds = 80;
 
 int t0 = 0x57bf953b78f054bc;
 int t1 = 0x0a78a94e98868e69;
-int t2 = 0xf40f3f55f937505f;
-int t3 = 0x886d00acc1792c76;
 
 struct zander3_state {
     uint64_t K[80][4];
     uint64_t D[4];
     uint64_t last[4];
     uint64_t next[4];
+    int rounds;
 };
 
 struct z3ksa_state {
@@ -50,18 +48,36 @@ void *zander3_F(struct z3ksa_state *state) {
         state->r[13] ^= state->r[2];
         state->r[14] = zander3_rotl((state->r[14] ^ state->r[0]), 3);
         state->r[15] += state->r[5];
+
+        state->r[15] += state->r[6];
+        state->r[2] ^= state->r[15];
+        state->r[14] = zander3_rotl((state->r[14] ^ state->r[12]), 9);
+        state->r[4] += state->r[9];
+        state->r[13] ^= state->r[11];
+        state->r[6] = zander3_rotr((state->r[6] ^ state->r[10]), 6);
+        state->r[12] += state->r[13];
+        state->r[8] ^= state->r[8];
+        state->r[11] = zander3_rotl((state->r[11] ^ state->r[3]), 11);
+        state->r[10] += state->r[1];
+        state->r[1] ^= state->r[4];
+        state->r[3] = zander3_rotr((state->r[3] ^ state->r[7]), 7);
+        state->r[5] += state->r[0];
+        state->r[7] ^= state->r[2];
+        state->r[9] = zander3_rotl((state->r[9] ^ state->r[0]), 3);
+        state->r[0] += state->r[5];
     }
     for (r = 0; r < 16; r++) {
         state->o ^= state->r[r];
     }
 }
 
-void z3gen_subkeys(struct zander3_state * state, unsigned char * key, int keylen, unsigned char * iv, int ivlen, int z3rounds) {
+void z3gen_subkeys(struct zander3_state * state, unsigned char * key, int keylen, unsigned char * iv, int ivlen) {
     struct z3ksa_state kstate;
     int c = 0;
     int i;
     int s;
-    memset(state->K, 0, 80*(4*sizeof(uint64_t)));
+    state->rounds = ((keylen / 4) + ((keylen / 8) + (48 - (keylen / 8))));
+    memset(state->K, 0, state->rounds*(4*sizeof(uint64_t)));
     memset(&kstate.r, 0, 16*sizeof(uint64_t));
     memset(&kstate.o, 0, sizeof(uint64_t));
     memset(state->last, 0, 4*sizeof(uint64_t));
@@ -77,7 +93,7 @@ void z3gen_subkeys(struct zander3_state * state, unsigned char * key, int keylen
         state->last[i] = ((uint64_t)iv[c] << 56) + ((uint64_t)iv[c+1] << 48) + ((uint64_t)iv[c+2] << 40) + ((uint64_t)iv[c+3] << 32) + ((uint64_t)iv[c+4] << 24) + ((uint64_t)iv[c+5] << 16) + ((uint64_t)iv[c+6] << 8) + (uint64_t)iv[c+7];
 	c += 8;
     }
-    for (i = 0; i < z3rounds; i++) {
+    for (i = 0; i < state->rounds; i++) {
         for (s = 0; s < 4; s++) {
             zander3_F(&kstate);
             state->K[i][s] = 0;
@@ -100,23 +116,48 @@ uint64_t z3block_encrypt(struct zander3_state * state, uint64_t *xl, uint64_t *x
     Xp = *xp;
     Xq = *xq;
 
-    for (i = 0; i < z3rounds; i++) {
+    for (i = 0; i < state->rounds; i++) {
         Xr = Xr + state->K[i][0];
         Xl = Xl + state->K[i][1];
         Xp = Xp + state->K[i][2];
         Xq = Xq + state->K[i][3];
 
-        Xl += Xq + t1;
+        Xl += Xq + t0;
         Xl = zander3_rotl(Xl, 9);
         Xl = Xl ^ Xp;
-        Xq += Xp + t2;
+        Xq += Xp + t1;
         Xq = zander3_rotl(Xq, 13);
         Xq = Xq ^ Xr;
-        Xp += Xr + t3;
+        Xp += Xr;
         Xp = zander3_rotl(Xp, 8);
         Xp = Xp ^ Xl;
-        Xr += Xl + t0;
+        Xr += Xl;
         Xr = zander3_rotl(Xr, 29);
+        Xr = Xr ^ Xq;
+
+        Xr += (zander3_rotr(Xp, 3) ^ Xl);
+        Xl += (zander3_rotr(Xq, 2) ^ Xr);
+        Xp += (zander3_rotr(Xr, 6) ^ Xq);
+        Xq += (zander3_rotr(Xl, 7) ^ Xp);
+        
+        temp = Xl;
+        Xl = Xr;
+        Xr = temp;
+        temp = Xp;
+        Xp = Xq;
+        Xq = temp;
+
+        Xl += Xq;
+        Xl = zander3_rotl(Xl, 15);
+        Xl = Xl ^ Xp;
+        Xq += Xp;
+        Xq = zander3_rotl(Xq, 22);
+        Xq = Xq ^ Xr;
+        Xp += Xr;
+        Xp = zander3_rotl(Xp, 7);
+        Xp = Xp ^ Xl;
+        Xr += Xl;
+        Xr = zander3_rotl(Xr, 12);
         Xr = Xr ^ Xq;
         
         Xr += Xp;
@@ -124,15 +165,13 @@ uint64_t z3block_encrypt(struct zander3_state * state, uint64_t *xl, uint64_t *x
         Xp += Xr;
         Xq += Xl;
         
-        temp = Xr;
-        Xr = Xl;
-        Xl = temp;
         temp = Xq;
-        Xq = Xp;
-        Xp = temp;
+        Xq = Xr;
+        Xr = temp;
+        temp = Xp;
+        Xp = Xl;
+        Xl = temp;
         
-        
-
     }
     *xl = Xl + state->D[3];
     *xr = Xr + state->D[2];
@@ -154,31 +193,56 @@ uint64_t z3block_decrypt(struct zander3_state * state, uint64_t *xl, uint64_t *x
     Xp -= state->D[1];
     Xq -= state->D[0];
 
-    for (i = (z3rounds - 1); i != -1; i--) {
-        temp = Xr;
-        Xr = Xl;
-        Xl = temp;
+    for (i = (state->rounds - 1); i != -1; i--) {
         temp = Xq;
+        Xq = Xr;
+        Xr = temp;
+        temp = Xp;
+        Xp = Xl;
+        Xl = temp;
 
-        Xq = Xp;
-        Xp = temp;
         Xq -= Xl;
         Xp -= Xr;
         Xl -= Xq;
         Xr -= Xp;
+      
+        Xr = Xr ^ Xq;
+        Xr = zander3_rotr(Xr, 12);
+        Xr -= Xl;
+        Xp = Xp ^ Xl;
+        Xp = zander3_rotr(Xp, 7);
+        Xp -= Xr;
+        Xq = Xq ^ Xr;
+        Xq = zander3_rotr(Xq, 22);
+        Xq -= Xp;
+        Xl = Xl ^ Xp;
+        Xl = zander3_rotr(Xl, 15);
+        Xl -= Xq;
+      
+        temp = Xl;
+        Xl = Xr;
+        Xr = temp;
+        temp = Xp;
+        Xp = Xq;
+        Xq = temp;
+        
+        Xq -= (zander3_rotr(Xl, 7) ^ Xp);
+        Xp -= (zander3_rotr(Xr, 6) ^ Xq);
+        Xl -= (zander3_rotr(Xq, 2) ^ Xr);
+        Xr -= (zander3_rotr(Xp, 3) ^ Xl);
 
         Xr = Xr ^ Xq;
         Xr = zander3_rotr(Xr, 29);
-        Xr -= Xl + t0;
+        Xr -= Xl;
         Xp = Xp ^ Xl;
         Xp = zander3_rotr(Xp, 8);
-        Xp -= Xr + t3;
+        Xp -= Xr;
         Xq = Xq ^ Xr;
         Xq = zander3_rotr(Xq, 13);
-        Xq -= Xp + t2;
+        Xq -= Xp + t1;
         Xl = Xl ^ Xp;
         Xl = zander3_rotr(Xl, 9);
-        Xl -= Xq + t1;
+        Xl -= Xq + t0;
 
         Xq -= state->K[i][3];
         Xp -= state->K[i][2];
@@ -202,7 +266,7 @@ void zanderfish3_cbc_encrypt(unsigned char * msg, int msglen, unsigned char * ke
     int blocks = msglen / z3blocklen;
     int c = 0;
     int i;
-    z3gen_subkeys(&state, key, keylen, iv, ivlen, z3rounds);
+    z3gen_subkeys(&state, key, keylen, iv, ivlen);
     for (i = 0; i < blocks; i++) {
 	if (i == (blocks - 1)) {
             for (int p = 0; p < extrabytes; p++) {
@@ -265,6 +329,7 @@ void zanderfish3_cbc_encrypt(unsigned char * msg, int msglen, unsigned char * ke
 
 int zanderfish3_cbc_decrypt(unsigned char * msg, int msglen, unsigned char * key, int keylen, unsigned char * iv, int ivlen) {
     struct zander3_state state;
+    //int z3rounds = ((keylen / 4) + ((keylen / 8) + (48 - (keylen / 8))));
     int count = 0;
     uint64_t xl;
     uint64_t xr;
@@ -273,7 +338,7 @@ int zanderfish3_cbc_decrypt(unsigned char * msg, int msglen, unsigned char * key
     int blocks = msglen / z3blocklen;
     int c = 0;
     int i;
-    z3gen_subkeys(&state, key, keylen, iv, ivlen, z3rounds);
+    z3gen_subkeys(&state, key, keylen, iv, ivlen);
     for (i = 0; i < blocks; i++) {
         xl = ((uint64_t)msg[c] << 56) + ((uint64_t)msg[c+1] << 48) + ((uint64_t)msg[c+2] << 40) + ((uint64_t)msg[c+3] << 32) + ((uint64_t)msg[c+4] << 24) + ((uint64_t)msg[c+5] << 16) + ((uint64_t)msg[c+6] << 8) + (uint64_t)msg[c+7];
         xr = ((uint64_t)msg[c+8] << 56) + ((uint64_t)msg[c+9] << 48) + ((uint64_t)msg[c+10] << 40) + ((uint64_t)msg[c+11] << 32) + ((uint64_t)msg[c+12] << 24) + ((uint64_t)msg[c+13] << 16) + ((uint64_t)msg[c+14] << 8) + (uint64_t)msg[c+15];
@@ -343,4 +408,3 @@ int zanderfish3_cbc_decrypt(unsigned char * msg, int msglen, unsigned char * key
     }
     return count;
 }
-

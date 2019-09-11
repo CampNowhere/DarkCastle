@@ -37,6 +37,23 @@ void *amagus_F(struct amagus_state *state) {
         state->r[13] ^= state->r[2];
         state->r[14] = amagus_rl((state->r[14] ^ state->r[0]), 3);
         state->r[15] += state->r[5];
+        
+        state->r[15] += state->r[6];
+        state->r[2] ^= state->r[15];
+        state->r[14] = amagus_rl((state->r[14] ^ state->r[12]), 9);
+        state->r[4] += state->r[9];
+        state->r[13] ^= state->r[11];
+        state->r[6] = amagus_rr((state->r[6] ^ state->r[10]), 6);
+        state->r[12] += state->r[13];
+        state->r[8] ^= state->r[8];
+        state->r[11] = amagus_rl((state->r[11] ^ state->r[3]), 11);
+        state->r[10] += state->r[1];
+        state->r[1] ^= state->r[4];
+        state->r[3] = amagus_rr((state->r[3] ^ state->r[7]), 7);
+        state->r[5] += state->r[0];
+        state->r[7] ^= state->r[2];
+        state->r[9] = amagus_rl((state->r[9] ^ state->r[0]), 3);
+        state->r[0] += state->r[5];
     }
 }
 

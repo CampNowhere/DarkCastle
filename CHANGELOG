@@ -11,3 +11,5 @@ v0.4.5 fix 0.4.4, Wild is still in the code base as the key wrapper for Spock
 v0.4.6 - Fixed mixing algorithm in ZanderFish3 and tweak placement
 
 v0.4.7 - Added some word swaps to ZanderFish3.  Should be the last change in the design.
+
+v0.5 - New cipher designs for Amagus, Uvajda, Specjal and ZanderFish3.  Dieharder testing 100 iterations for each cipher and published the dieharder results in each cipher's repo.  Changed castlesmoke.py to clean up after itself.  Zander3 got a new mixing function and formula to calculate rounds based on key length.  Uvajda now uses an addition operation instead of XOR with the previous state.  Amagus has a transposition layer added. Specjal's round function was corrected.
