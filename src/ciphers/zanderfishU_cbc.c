@@ -58,6 +58,23 @@ void *zU_F(struct zUksa_state *state) {
         state->r[13] ^= state->r[2];
         state->r[14] = zU_rotl((state->r[14] ^ state->r[0]), 3);
         state->r[15] += state->r[5];
+
+        state->r[15] += state->r[6];
+        state->r[2] ^= state->r[15];
+        state->r[14] = zander3_rotl((state->r[14] ^ state->r[12]), 9);
+        state->r[4] += state->r[9];
+        state->r[13] ^= state->r[11];
+        state->r[6] = zander3_rotr((state->r[6] ^ state->r[10]), 6);
+        state->r[12] += state->r[13];
+        state->r[8] ^= state->r[8];
+        state->r[11] = zander3_rotl((state->r[11] ^ state->r[3]), 11);
+        state->r[10] += state->r[1];
+        state->r[1] ^= state->r[4];
+        state->r[3] = zander3_rotr((state->r[3] ^ state->r[7]), 7);
+        state->r[5] += state->r[0];
+        state->r[7] ^= state->r[2];
+        state->r[9] = zander3_rotl((state->r[9] ^ state->r[0]), 3);
+        state->r[0] += state->r[5];
     }
     for (r = 0; r < 16; r++) {
         state->o ^= state->r[r];
@@ -152,8 +169,8 @@ void zUgen_sbox(struct zanderU_state * state, unsigned char * key, int keylen, u
             k[j] = (k[c] + k[j]) & 0xff;
             o = (k[k[j]] + k[j]) & 0xff;
             o = ((uint8_t)C2[o] << 48);
-            temp = state->S[s][o];
-            state->S[s][o] = state->S[s][o];
+            temp = state->S[s][i];
+            state->S[s][i] = state->S[s][o];
             state->S[s][o] = temp;
         }
     }
