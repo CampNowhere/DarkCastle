@@ -5,8 +5,8 @@
 #include "castle_core.c"
 
 void usage() {
-    printf("DarkCastle v0.5.1 - by KryptoMagik\n\n");
-    printf("Algorithms:\n***********\n\ndark           256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\nspock256-cbc   256 bit\namagus         256 bit\namagus512      512 bit\namagus1024     1024 bit\nspecjal        256 bit\nspecjal512     512 bit\nspecjal1024    1024 bit\nzanderfish2-cbc 256 bit\nzanderfish2-ofb 256 bit\nzanderfish2-ctr 256 bit\nzanderfishC    512 bit\nzanderfishU    1024 bit\nzanderfish3    256 bit\n\n");
+    printf("DarkCastle v0.5.2 - by KryptoMagik\n\n");
+    printf("Algorithms:\n***********\n\ndark           256 bit\nuvajda         256 bit\nwildthing      256 bit\nspock-cbc      128 bit\nspock256-cbc   256 bit\namagus         256 bit\namagus512      512 bit\namagus1024     1024 bit\nspecjal        256 bit\nspecjal512     512 bit\nspecjal1024    1024 bit\nzanderfish2-cbc 256 bit\nzanderfish2-ofb 256 bit\nzanderfish2-ctr 256 bit\nzanderfishU    1024 bit\nzanderfish3    256 bit\n\n");
     printf("Usage: castle <algorithm> <-e/-d> <input file> <output file> <password>\n\n");
 }
 
@@ -205,14 +205,6 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(mode, decrypt_symbol) == 0) {
             zander3cbc_decrypt(infile_name, fsize, outfile_name, zanderfish3_key_length, zanderfish3_nonce_length, zanderfish3_mac_length, kdf_iterations, kdf_salt, password);
-        }
-    }
-    else if (strcmp(algorithm, "zanderfishC") == 0) {
-        if (strcmp(mode, encrypt_symbol) == 0) {
-            zanderCcbc_encrypt(infile_name, fsize, outfile_name, zanderfishC_key_length, zanderfishC_nonce_length, zanderfishC_mac_length, kdf_iterations, kdf_salt, password);
-        }
-        else if (strcmp(mode, decrypt_symbol) == 0) {
-            zanderCcbc_decrypt(infile_name, fsize, outfile_name, zanderfishC_key_length, zanderfishC_nonce_length, zanderfishC_mac_length, kdf_iterations, kdf_salt, password);
         }
     }
     else if (strcmp(algorithm, "zanderfishU") == 0) {

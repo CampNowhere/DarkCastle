@@ -7,7 +7,6 @@
 #include "ciphers/zanderfish2_ofb.c"
 #include "ciphers/zanderfish2_ctr.c"
 #include "ciphers/zanderfish3_cbc.c"
-#include "ciphers/zanderfishC_cbc.c"
 #include "ciphers/zanderfishU_cbc.c"
 #include "ciphers/wild.c"
 #include "ciphers/wildthing.c"
@@ -904,90 +903,6 @@ void zander2cbc_decrypt(char *infile_name, long long fsize, char *outfile_name, 
         int pad = zanderfish2_cbc_decrypt(msg, (fsize - mac_length - iv_length - key_length - keywrap256_ivlen),keyprime, key_length, iv, iv_length);
         outfile = fopen(outfile_name, "wb");
         fwrite(msg, 1, (fsize - mac_length - iv_length - key_length - keywrap256_ivlen- pad), outfile);
-        fclose(outfile);
-        free(msg);
-    }
-    else {
-        printf("Error: Message has been tampered with.\n");
-    }
-}
-
-void zanderCcbc_encrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
-    unsigned char *keyprime[key_length];
-    unsigned char *K[key_length];
-    int extrabytes = 16 - (fsize % 16);
-    if (extrabytes != 0) {
-        fsize += extrabytes;
-    }
-    FILE *infile, *outfile;
-    unsigned char *msg;
-    msg = (unsigned char *) malloc(fsize);
-    unsigned char mac[mac_length];
-    unsigned char mac_key[key_length];
-    unsigned char key[key_length];
-    manja_kdf(password, strlen(password), key, key_length, kdf_salt, strlen(kdf_salt), kdf_iterations);
-    infile = fopen(infile_name, "rb");
-    outfile = fopen(outfile_name, "wb");
-    unsigned char *kwnonce[keywrap512_ivlen];
-    key_wrap_encrypt(keyprime, key_length, key, K, kwnonce);
-    fwrite(kwnonce, 1, keywrap512_ivlen, outfile);
-    unsigned char iv[iv_length];
-    amagus_random(&iv, iv_length);
-    fwrite(iv, 1, iv_length, outfile);
-    fwrite(K, 1, key_length, outfile);
-    fread(msg, 1, (fsize-extrabytes), infile);
-    zanderfishC_cbc_encrypt(msg, fsize, keyprime, key_length, iv, iv_length, extrabytes);
-    fwrite(msg, 1, fsize, outfile);
-    fclose(outfile);
-    fclose(infile);
-    free(msg);
-
-    outfile = fopen(outfile_name, "rb");
-    fseek(outfile, 0, SEEK_END);
-    fsize = ftell(outfile);
-    fseek(outfile, 0, SEEK_SET);
-    msg = (unsigned char *) malloc(fsize);
-    fread(msg, 1, fsize, outfile);
-    fclose(outfile);
-    outfile = fopen(outfile_name, "wb");
-    manja_kdf(key, key_length, mac_key, key_length, kdf_salt, strlen(kdf_salt), kdf_iterations);
-    ganja_hmac(msg, fsize, &mac, mac_key, key_length, kdf_salt);
-    fwrite(mac, 1, mac_length, outfile);
-    fwrite(msg, 1, fsize, outfile);
-    fclose(outfile);
-    free(msg);
-}
-
-void zanderCcbc_decrypt(char *infile_name, long long fsize, char *outfile_name, int key_length, int iv_length, int mac_length, int kdf_iterations, unsigned char * kdf_salt, unsigned char *password) {
-    FILE *infile, *outfile;
-    unsigned char mac[mac_length];
-    unsigned char mac_key[key_length];
-    unsigned char key[key_length];
-    unsigned char *keyprime[key_length];
-    unsigned char *msg;
-    unsigned char mac_verify[mac_length];
-    infile = fopen(infile_name, "rb");
-    msg = (unsigned char *) malloc(fsize-mac_length);
-    manja_kdf(password, strlen(password), key, key_length, kdf_salt, strlen(kdf_salt), kdf_iterations);
-    manja_kdf(key, key_length, mac_key, key_length, kdf_salt, strlen(kdf_salt), kdf_iterations);
-    fread(&mac, 1, mac_length, infile);
-    fread(msg, 1, (fsize-mac_length), infile);
-    ganja_hmac(msg, (fsize-mac_length), &mac_verify, mac_key, key_length, kdf_salt);
-    free(msg);
-    if (memcmp(mac, mac_verify, mac_length) == 0) {
-        msg = (unsigned char *) malloc(fsize-mac_length-iv_length-key_length-keywrap512_ivlen);
-        unsigned char *iv[iv_length];
-        fseek(infile, mac_length, SEEK_SET);
-        unsigned char *kwnonce[keywrap512_ivlen];
-        fread(kwnonce, 1, keywrap512_ivlen, infile);
-        fread(iv, 1, iv_length, infile);
-        fread(keyprime, 1, key_length, infile);
-        key_wrap_decrypt(keyprime, key_length, key, kwnonce);
-        fread(msg, 1, (fsize - mac_length - iv_length - key_length - keywrap512_ivlen), infile);
-        fclose(infile);
-        int pad = zanderfishC_cbc_decrypt(msg, (fsize - mac_length - iv_length - key_length-keywrap512_ivlen),keyprime, key_length, iv, iv_length);
-        outfile = fopen(outfile_name, "wb");
-        fwrite(msg, 1, (fsize - mac_length - iv_length - key_length - keywrap512_ivlen - pad), outfile);
         fclose(outfile);
         free(msg);
     }
