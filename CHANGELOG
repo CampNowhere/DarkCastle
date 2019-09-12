@@ -17,3 +17,5 @@ v0.5 - New cipher designs for Amagus, Uvajda, Specjal and ZanderFish3.  Dieharde
 v0.5.1 - Fix critical bug in ZanderFish2/C/U's S-Box generation. Also updated the round key function to be the latest Amagus function.  ZanderFish2 is complete and self audited.  Update mixing function to ZanderFish3 which remains under construction as the design solidifies through the vetting process.
 
 v0.5.2 - Drop ZanderFishC support
+
+v0.5.3 - Fixed ZanderFish2 on all platforms

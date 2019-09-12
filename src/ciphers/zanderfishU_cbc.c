@@ -1184,9 +1184,10 @@ void zUgen_subkeys(struct zanderU_state * state, unsigned char * key, int keylen
 }
 
 void zUgen_sbox(struct zanderU_state * state, unsigned char * key, int keylen, unsigned char * crosskey) {
-    int i, o, c;
+    int i, o;
     int s;
     int j = 0;
+    int c = 0;
     int temp;
     int k[256];
     int kb[256];

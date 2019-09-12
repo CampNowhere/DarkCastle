@@ -107,9 +107,10 @@ void zgen_subkeys(struct zander_state * state, unsigned char * key, int keylen, 
 }
 
 void zgen_sbox(struct zander_state * state, unsigned char * key, int keylen) {
-    int i, o, c;
+    int i, o;
     int s;
     int j = 0;
+    int c = 0;
     int temp;
     int k[256];
     for (i = 0; i < 256; i++) {
