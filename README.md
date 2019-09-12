@@ -47,10 +47,6 @@ Zanderfish3 256 bit authenticated with Ganja 256 bit - 256 bit IV length
 
 https://github.com/pvial00/Zanderfish3
 
-ZanderfishC 512 bit authenticated with Ganja 256 bit - 128 bit IV length
-
-https://github.com/pvial00/ZanderfishC
-
 ZanderfishU 1024 bit authenticated with Ganja 256 bit - 128 bit IV length
 
 https://github.com/pvial00/ZanderfishU
