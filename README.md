@@ -1,3 +1,26 @@
+# IMPORTANT MESSAGE FROM CampNowhere
+
+This is a respository full of terrible crypto code. It is only here for educational purposes, to illustrate the myriad of reasons that you should never try to roll your own crypto. Everything below the line is the original author's README and other than this message this code has not been altered from the point at which it was forked. 
+
+In this repository you will find:
+
+1. Bad C code
+    * Tons of constants stored as ints instead of preprocessor macro values
+    * Cipher state stored in global variables
+    * Reading the entire file into memory before performing an operation on it
+    * Incredibly long if/else blocks
+    * Lots of unnecessary repetition
+    * Poorly structured loops that could easily enter an infinite state
+    * Poor coupling - the implementations of the block ciphers themselves take pointers to contiguous blocks of memory
+    * Bizarre practices like reading one byte at a time from /dev/urandom to generate a password (This is actually in this code's sister repository, DarkPass)
+2. Cryptographic algorithms that are a jumble of bad C code, with no formal description
+3. Unprovable statements
+    * "This leaves no room for clues regarding the state."
+    * "In order to calculate the round after it or before it, all 512 bits of the state is needed."
+    * "Best attack vector is brute force."
+    
+---
+
 # DarkCastle
 
 *** Warning the ciphers contained in this program are still undergoing cryptanalysis
