@@ -13,7 +13,7 @@ In this repository you will find:
     * Poorly structured loops that could easily enter an infinite state
     * Poor coupling - the implementations of the block ciphers themselves take pointers to contiguous blocks of memory
     * Bizarre practices like reading one byte at a time from /dev/urandom to generate a password (This is actually in this code's sister repository, DarkPass)
-2. Cryptographic algorithms that are a jumble of bad C code, with no formal description
+2. Cryptographic algorithms that are a jumble of bad C code, with no formal description, that don't even pass a smell test for being secure
 3. Unprovable statements
     * "This leaves no room for clues regarding the state."
     * "In order to calculate the round after it or before it, all 512 bits of the state is needed."
